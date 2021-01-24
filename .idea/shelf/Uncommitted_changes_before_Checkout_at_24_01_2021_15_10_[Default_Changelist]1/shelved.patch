@@ -1,0 +1,557 @@
+Index: app/src/main/java/android/eservices/webrequests/BookApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package android.eservices.webrequests;\r\n\r\nimport android.app.Application;\r\nimport android.eservices.webrequests.data.di.FakeDependencyInjection;\r\n\r\nimport com.facebook.stetho.Stetho;\r\n\r\n/**\r\n * In this sample application, we decided not to use dependency injection.\r\n * Thus, there are some objects we don't want to recreate, such as retrofit, gson or API services.\r\n * Here we use the Application class to store our singletons, but in real case, we shall use DI to\r\n * handle these issues. In other words, please do not do that in production-aimed apps.\r\n */\r\npublic class BookApplication extends Application {\r\n\r\n    public static final String API_KEY = \"AIzaSyBd1IFgqsRZgDNDCMqycRwNEPehfk2XqkM\";\r\n\r\n    @Override\r\n    public void onCreate() {\r\n        super.onCreate();\r\n        Stetho.initializeWithDefaults(this);\r\n        FakeDependencyInjection.setContext(this);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/BookApplication.java	(revision 73a158d096ecbeda05807f13ab6dcf5ad8ff03f8)
++++ app/src/main/java/android/eservices/webrequests/BookApplication.java	(date 1611222730486)
+@@ -13,7 +13,7 @@
+  */
+ public class BookApplication extends Application {
+ 
+-    public static final String API_KEY = "AIzaSyBd1IFgqsRZgDNDCMqycRwNEPehfk2XqkM";
++    public static final String API_KEY = "AIzaSyB5u6-Nkqj6zkkas-IIUKTQQs3ESBhwB5w";
+ 
+     @Override
+     public void onCreate() {
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># android-eservices-webrequests\r\n\r\nCe TP est le dernier de la série pour le cours d'Android cette année.\r\nIl est plus important que les précédents et mélange plusieurs notions.\r\nIl fait suite au cours sur RxJava, Retrofit et Gson.\r\n\r\n### Description\r\nCette application permet de rechercher un livre via l'API books de Google et de le marquer comme favori.\r\nCes favoris sont stockés localement sur l'ordinateur dans une base de données Room. \r\nA tout moment il est possible de retirer un livre de ses favoris.\r\n\r\n### Aspects techniques\r\nL'application respecte le principe de Clean Architecture [recommandée par Android](https://developer.android.com/jetpack/docs/guide#recommended-app-arch). \r\n\r\nL'application utilise l'architecture MVVM en deux couches (présentation et donnée).\r\n\r\nNous utilisons les ViewModels couplés à LiveData pour la mise à jour de la vue.\r\n\r\nLes appels réseau sont effectués via Retrofit sur l'API Books.\r\nToutes les infos sur l'API peuvent être trouvées [ici](https://developers.google.com/books/docs/v1/using). \r\n**Attention, il faudra vous créer une clé qui vous autorise à utiliser l'API, pour cela, lisez [ça](https://cloud.google.com/docs/authentication/api-keys?visit_id=637031972070460939-2253245193&rd=1).** \r\n\r\n\r\nLes flux de données de l'application sont gérés avec [RxJava 2](https://github.com/ReactiveX/RxJava). \r\n\r\n\r\nJettez un oeil à la classe Application ? A quoi sert-elle ?\r\n\r\n\r\n### Objectifs\r\nCe TP est découpé en deux partie qui se suivent, faites d'abord l'une puis l'autre.\r\n\r\n###### Première partie : les appels réseau\r\nPremier objectif, pouvoir récupérer les livres correspondant à la recherche de l'utilisateur.\r\nPour ça tout est à mettre en place :\r\n- [x] Préparer l'architecture\r\n- [ ] Créer l'interface Retrofit et mettre en place la méthode permettant de fournir une instance du service dans notre fausse DI.\r\n- [ ] Créer les differents Repository et DataSources avec les bonnes méthodes qui seront appelées depuis le ViewModel.\r\n- [ ] Corriger le ViewModel pour gérer la recherche, et implémenter son fonctionnement dans le Fragment. Gérer la création du ViewModel.\r\n- [ ] Préparer le mapper qui prépare les objets reçus dans le ViewModel à être affichés dans la vue.\r\n- [ ] Initialiser et appeler le ViewModel depuis la vue.\r\n\r\n###### Deuxième partie : les favoris\r\nMaintenant que l'on sait faire des recherches, on souhaite pouvoir gérer les favoris. \r\nOn peut ajouter et retirer des favoris facilement.\r\nCes favoris vont être stockés dans une base de données Android Room.\r\nPour faire ça il va falloir :\r\n- [ ] Mettre en place la BDD, l'entité livre, et préparer la méthode qui permet de fournir une instance Singleton de la BDD.\r\n- [ ] Mettre à jour la partie Repository en créant les méthodes de récupération et suppression de favoris.\r\n- [ ] Ecrire l'algorithme qui permet de transformer les résultats de la recherche en indiquant ceux qui sont déjà en favoris.\r\n- [ ] Créer le ViewModel pour la partie Favoris et le lier à la vue.\r\n- [ ] Tester tout ça, utiliser [Stetho](http://facebook.github.io/stetho/) 
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- README.md	(revision 73a158d096ecbeda05807f13ab6dcf5ad8ff03f8)
++++ README.md	(date 1611227631992)
+@@ -34,10 +34,10 @@
+ Premier objectif, pouvoir récupérer les livres correspondant à la recherche de l'utilisateur.
+ Pour ça tout est à mettre en place :
+ - [x] Préparer l'architecture
+-- [ ] Créer l'interface Retrofit et mettre en place la méthode permettant de fournir une instance du service dans notre fausse DI.
+-- [ ] Créer les differents Repository et DataSources avec les bonnes méthodes qui seront appelées depuis le ViewModel.
++- [x] Créer l'interface Retrofit et mettre en place la méthode permettant de fournir une instance du service dans notre fausse DI.
++- [x] Créer les differents Repository et DataSources avec les bonnes méthodes qui seront appelées depuis le ViewModel.
++- [x] Préparer le mapper qui prépare les objets reçus dans le ViewModel à être affichés dans la vue.
+ - [ ] Corriger le ViewModel pour gérer la recherche, et implémenter son fonctionnement dans le Fragment. Gérer la création du ViewModel.
+-- [ ] Préparer le mapper qui prépare les objets reçus dans le ViewModel à être affichés dans la vue.
+ - [ ] Initialiser et appeler le ViewModel depuis la vue.
+ 
+ ###### Deuxième partie : les favoris
+Index: gradlew
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#!/usr/bin/env sh\r\n\r\n##############################################################################\r\n##\r\n##  Gradle start up script for UN*X\r\n##\r\n##############################################################################\r\n\r\n# Attempt to set APP_HOME\r\n# Resolve links: $0 may be a link\r\nPRG=\"$0\"\r\n# Need this for relative symlinks.\r\nwhile [ -h \"$PRG\" ] ; do\r\n    ls=`ls -ld \"$PRG\"`\r\n    link=`expr \"$ls\" : '.*-> \\(.*\\)$'`\r\n    if expr \"$link\" : '/.*' > /dev/null; then\r\n        PRG=\"$link\"\r\n    else\r\n        PRG=`dirname \"$PRG\"`\"/$link\"\r\n    fi\r\ndone\r\nSAVED=\"`pwd`\"\r\ncd \"`dirname \\\"$PRG\\\"`/\" >/dev/null\r\nAPP_HOME=\"`pwd -P`\"\r\ncd \"$SAVED\" >/dev/null\r\n\r\nAPP_NAME=\"Gradle\"\r\nAPP_BASE_NAME=`basename \"$0\"`\r\n\r\n# Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.\r\nDEFAULT_JVM_OPTS=\"\"\r\n\r\n# Use the maximum available, or set MAX_FD != -1 to use that value.\r\nMAX_FD=\"maximum\"\r\n\r\nwarn () {\r\n    echo \"$*\"\r\n}\r\n\r\ndie () {\r\n    echo\r\n    echo \"$*\"\r\n    echo\r\n    exit 1\r\n}\r\n\r\n# OS specific support (must be 'true' or 'false').\r\ncygwin=false\r\nmsys=false\r\ndarwin=false\r\nnonstop=false\r\ncase \"`uname`\" in\r\n  CYGWIN* )\r\n    cygwin=true\r\n    ;;\r\n  Darwin* )\r\n    darwin=true\r\n    ;;\r\n  MINGW* )\r\n    msys=true\r\n    ;;\r\n  NONSTOP* )\r\n    nonstop=true\r\n    ;;\r\nesac\r\n\r\nCLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar\r\n\r\n# Determine the Java command to use to start the JVM.\r\nif [ -n \"$JAVA_HOME\" ] ; then\r\n    if [ -x \"$JAVA_HOME/jre/sh/java\" ] ; then\r\n        # IBM's JDK on AIX uses strange locations for the executables\r\n        JAVACMD=\"$JAVA_HOME/jre/sh/java\"\r\n    else\r\n        JAVACMD=\"$JAVA_HOME/bin/java\"\r\n    fi\r\n    if [ ! -x \"$JAVACMD\" ] ; then\r\n        die \"ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME\r\n\r\nPlease set the JAVA_HOME variable in your environment to match the\r\nlocation of your Java installation.\"\r\n    fi\r\nelse\r\n    JAVACMD=\"java\"\r\n    which java >/dev/null 2>&1 || die \"ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.\r\n\r\nPlease set the JAVA_HOME variable in your environment to match the\r\nlocation of your Java installation.\"\r\nfi\r\n\r\n# Increase the maximum file descriptors if we can.\r\nif [ \"$cygwin\" = \"false\" -a \"$darwin\" = \"false\" -a \"$nonstop\" = \"false\" ] ; then\r\n    MAX_FD_LIMIT=`ulimit -H -n`\r\n    if [ $? -eq 0 ] ; then\r\n        if [ \"$MAX_FD\" = \"maximum\" -o \"$MAX_FD\" = \"max\" ] ; then\r\n            MAX_FD=\"$MAX_FD_LIMIT\"\r\n        fi\r\n        ulimit -n $MAX_FD\r\n        if [ $? -ne 0 ] ; then\r\n            warn \"Could not set maximum file descriptor limit: $MAX_FD\"\r\n        fi\r\n    else\r\n        warn \"Could not query maximum file descriptor limit: $MAX_FD_LIMIT\"\r\n    fi\r\nfi\r\n\r\n# For Darwin, add options to specify how the application appears in the dock\r\nif $darwin; then\r\n    GRADLE_OPTS=\"$GRADLE_OPTS \\\"-Xdock:name=$APP_NAME\\\" \\\"-Xdock:icon=$APP_HOME/media/gradle.icns\\\"\"\r\nfi\r\n\r\n# For Cygwin, switch paths to Windows format before running java\r\nif $cygwin ; then\r\n    APP_HOME=`cygpath --path --mixed \"$APP_HOME\"`\r\n    CLASSPATH=`cygpath --path --mixed \"$CLASSPATH\"`\r\n    JAVACMD=`cygpath --unix \"$JAVACMD\"`\r\n\r\n    # We build the pattern for arguments to be converted via cygpath\r\n    ROOTDIRSRAW=`find -L / -maxdepth 1 -mindepth 1 -type d 2>/dev/null`\r\n    SEP=\"\"\r\n    for dir in $ROOTDIRSRAW ; do\r\n        ROOTDIRS=\"$ROOTDIRS$SEP$dir\"\r\n        SEP=\"|\"\r\n    done\r\n    OURCYGPATTERN=\"(^($ROOTDIRS))\"\r\n    # Add a user-defined pattern to the cygpath arguments\r\n    if [ \"$GRADLE_CYGPATTERN\" != \"\" ] ; then\r\n        OURCYGPATTERN=\"$OURCYGPATTERN|($GRADLE_CYGPATTERN)\"\r\n    fi\r\n    # Now convert the arguments - kludge to limit ourselves to /bin/sh\r\n    i=0\r\n    for arg in \"$@\" ; do\r\n        CHECK=`echo \"$arg\"|egrep -c \"$OURCYGPATTERN\" -`\r\n        CHECK2=`echo \"$arg\"|egrep -c \"^-\"`                                 ### Determine if an option\r\n\r\n        if [ $CHECK -ne 0 ] && [ $CHECK2 -eq 0 ] ; then                    ### Added a condition\r\n            eval `echo args$i`=`cygpath --path --ignore --mixed \"$arg\"`\r\n        else\r\n            eval `echo args$i`=\"\\\"$arg\\\"\"\r\n        fi\r\n        i=$((i+1))\r\n    done\r\n    case $i in\r\n        (0) set -- ;;\r\n        (1) set -- \"$args0\" ;;\r\n        (2) set -- \"$args0\" \"$args1\" ;;\r\n        (3) set -- \"$args0\" \"$args1\" \"$args2\" ;;\r\n        (4) set -- \"$args0\" \"$args1\" \"$args2\" \"$args3\" ;;\r\n        (5) set -- \"$args0\" \"$args1\" \"$args2\" \"$args3\" \"$args4\" ;;\r\n        (6) set -- \"$args0\" \"$args1\" \"$args2\" \"$args3\" \"$args4\" \"$args5\" ;;\r\n        (7) set -- \"$args0\" \"$args1\" \"$args2\" \"$args3\" \"$args4\" \"$args5\" \"$args6\" ;;\r\n        (8) set -- \"$args0\" \"$args1\" \"$args2\" \"$args3\" \"$args4\" \"$args5\" \"$args6\" \"$args7\" ;;\r\n        (9) set -- \"$args0\" \"$args1\" \"$args2\" \"$args3\" \"$args4\" \"$args5\" \"$args6\" \"$args7\" \"$args8\" ;;\r\n    esac\r\nfi\r\n\r\n# Escape application args\r\nsave () {\r\n    for i do printf %s\\\\n \"$i\" | sed \"s/'/'\\\\\\\\''/g;1s/^/'/;\\$s/\\$/' \\\\\\\\/\" ; done\r\n    echo \" \"\r\n}\r\nAPP_ARGS=$(save \"$@\")\r\n\r\n# Collect all arguments for the java command, following the shell quoting and substitution rules\r\neval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS \"\\\"-Dorg.gradle.appname=$APP_BASE_NAME\\\"\" -classpath \"\\\"$CLASSPATH\\\"\" org.gradle.wrapper.GradleWrapperMain \"$APP_ARGS\"\r\n\r\n# by default we should be in the correct project dir, but when run from Finder on Mac, the cwd is wrong\r\nif [ \"$(uname)\" = \"Darwin\" ] && [ \"$HOME\" = \"$PWD\" ]; then\r\n  cd \"$(dirname \"$0\")\"\r\nfi\r\n\r\nexec \"$JAVACMD\" \"$@\"\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gradlew	(revision 73a158d096ecbeda05807f13ab6dcf5ad8ff03f8)
++++ gradlew	(date 1611222039376)
+@@ -1,5 +1,21 @@
+ #!/usr/bin/env sh
+ 
++#
++# Copyright 2015 the original author or authors.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      https://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++
+ ##############################################################################
+ ##
+ ##  Gradle start up script for UN*X
+@@ -28,7 +44,7 @@
+ APP_BASE_NAME=`basename "$0"`
+ 
+ # Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+-DEFAULT_JVM_OPTS=""
++DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
+ 
+ # Use the maximum available, or set MAX_FD != -1 to use that value.
+ MAX_FD="maximum"
+@@ -109,8 +125,8 @@
+     GRADLE_OPTS="$GRADLE_OPTS \"-Xdock:name=$APP_NAME\" \"-Xdock:icon=$APP_HOME/media/gradle.icns\""
+ fi
+ 
+-# For Cygwin, switch paths to Windows format before running java
+-if $cygwin ; then
++# For Cygwin or MSYS, switch paths to Windows format before running java
++if [ "$cygwin" = "true" -o "$msys" = "true" ] ; then
+     APP_HOME=`cygpath --path --mixed "$APP_HOME"`
+     CLASSPATH=`cygpath --path --mixed "$CLASSPATH"`
+     JAVACMD=`cygpath --unix "$JAVACMD"`
+@@ -138,19 +154,19 @@
+         else
+             eval `echo args$i`="\"$arg\""
+         fi
+-        i=$((i+1))
++        i=`expr $i + 1`
+     done
+     case $i in
+-        (0) set -- ;;
+-        (1) set -- "$args0" ;;
+-        (2) set -- "$args0" "$args1" ;;
+-        (3) set -- "$args0" "$args1" "$args2" ;;
+-        (4) set -- "$args0" "$args1" "$args2" "$args3" ;;
+-        (5) set -- "$args0" "$args1" "$args2" "$args3" "$args4" ;;
+-        (6) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" ;;
+-        (7) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" ;;
+-        (8) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" ;;
+-        (9) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" "$args8" ;;
++        0) set -- ;;
++        1) set -- "$args0" ;;
++        2) set -- "$args0" "$args1" ;;
++        3) set -- "$args0" "$args1" "$args2" ;;
++        4) set -- "$args0" "$args1" "$args2" "$args3" ;;
++        5) set -- "$args0" "$args1" "$args2" "$args3" "$args4" ;;
++        6) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" ;;
++        7) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" ;;
++        8) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" ;;
++        9) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" "$args8" ;;
+     esac
+ fi
+ 
+@@ -159,14 +175,9 @@
+     for i do printf %s\\n "$i" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/' \\\\/" ; done
+     echo " "
+ }
+-APP_ARGS=$(save "$@")
++APP_ARGS=`save "$@"`
+ 
+ # Collect all arguments for the java command, following the shell quoting and substitution rules
+ eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "\"-Dorg.gradle.appname=$APP_BASE_NAME\"" -classpath "\"$CLASSPATH\"" org.gradle.wrapper.GradleWrapperMain "$APP_ARGS"
+ 
+-# by default we should be in the correct project dir, but when run from Finder on Mac, the cwd is wrong
+-if [ "$(uname)" = "Darwin" ] && [ "$HOME" = "$PWD" ]; then
+-  cd "$(dirname "$0")"
+-fi
+-
+ exec "$JAVACMD" "$@"
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1252
+===================================================================
+--- gradle/wrapper/gradle-wrapper.properties	(date 1611222039202)
++++ gradle/wrapper/gradle-wrapper.properties	(date 1611222039202)
+@@ -0,0 +1,5 @@
++distributionBase=GRADLE_USER_HOME
++distributionPath=wrapper/dists
++distributionUrl=https\://services.gradle.org/distributions/gradle-6.1.1-bin.zip
++zipStoreBase=GRADLE_USER_HOME
++zipStorePath=wrapper/dists
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/jarRepositories.xml	(date 1611222124247)
++++ .idea/jarRepositories.xml	(date 1611222124247)
+@@ -0,0 +1,25 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="BintrayJCenter" />
++      <option name="name" value="BintrayJCenter" />
++      <option name="url" value="https://jcenter.bintray.com/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="Google" />
++      <option name="name" value="Google" />
++      <option name="url" value="https://dl.google.com/dl/android/maven2/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: gradlew.bat
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@if \"%DEBUG%\" == \"\" @echo off\r\n@rem ##########################################################################\r\n@rem\r\n@rem  Gradle startup script for Windows\r\n@rem\r\n@rem ##########################################################################\r\n\r\n@rem Set local scope for the variables with windows NT shell\r\nif \"%OS%\"==\"Windows_NT\" setlocal\r\n\r\nset DIRNAME=%~dp0\r\nif \"%DIRNAME%\" == \"\" set DIRNAME=.\r\nset APP_BASE_NAME=%~n0\r\nset APP_HOME=%DIRNAME%\r\n\r\n@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.\r\nset DEFAULT_JVM_OPTS=\r\n\r\n@rem Find java.exe\r\nif defined JAVA_HOME goto findJavaFromJavaHome\r\n\r\nset JAVA_EXE=java.exe\r\n%JAVA_EXE% -version >NUL 2>&1\r\nif \"%ERRORLEVEL%\" == \"0\" goto init\r\n\r\necho.\r\necho ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.\r\necho.\r\necho Please set the JAVA_HOME variable in your environment to match the\r\necho location of your Java installation.\r\n\r\ngoto fail\r\n\r\n:findJavaFromJavaHome\r\nset JAVA_HOME=%JAVA_HOME:\"=%\r\nset JAVA_EXE=%JAVA_HOME%/bin/java.exe\r\n\r\nif exist \"%JAVA_EXE%\" goto init\r\n\r\necho.\r\necho ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%\r\necho.\r\necho Please set the JAVA_HOME variable in your environment to match the\r\necho location of your Java installation.\r\n\r\ngoto fail\r\n\r\n:init\r\n@rem Get command-line arguments, handling Windows variants\r\n\r\nif not \"%OS%\" == \"Windows_NT\" goto win9xME_args\r\n\r\n:win9xME_args\r\n@rem Slurp the command line arguments.\r\nset CMD_LINE_ARGS=\r\nset _SKIP=2\r\n\r\n:win9xME_args_slurp\r\nif \"x%~1\" == \"x\" goto execute\r\n\r\nset CMD_LINE_ARGS=%*\r\n\r\n:execute\r\n@rem Setup the command line\r\n\r\nset CLASSPATH=%APP_HOME%\\gradle\\wrapper\\gradle-wrapper.jar\r\n\r\n@rem Execute Gradle\r\n\"%JAVA_EXE%\" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% \"-Dorg.gradle.appname=%APP_BASE_NAME%\" -classpath \"%CLASSPATH%\" org.gradle.wrapper.GradleWrapperMain %CMD_LINE_ARGS%\r\n\r\n:end\r\n@rem End local scope for the variables with windows NT shell\r\nif \"%ERRORLEVEL%\"==\"0\" goto mainEnd\r\n\r\n:fail\r\nrem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of\r\nrem the _cmd.exe /c_ return code!\r\nif  not \"\" == \"%GRADLE_EXIT_CONSOLE%\" exit 1\r\nexit /b 1\r\n\r\n:mainEnd\r\nif \"%OS%\"==\"Windows_NT\" endlocal\r\n\r\n:omega\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gradlew.bat	(revision 73a158d096ecbeda05807f13ab6dcf5ad8ff03f8)
++++ gradlew.bat	(date 1611222039420)
+@@ -1,3 +1,19 @@
++@rem
++@rem Copyright 2015 the original author or authors.
++@rem
++@rem Licensed under the Apache License, Version 2.0 (the "License");
++@rem you may not use this file except in compliance with the License.
++@rem You may obtain a copy of the License at
++@rem
++@rem      https://www.apache.org/licenses/LICENSE-2.0
++@rem
++@rem Unless required by applicable law or agreed to in writing, software
++@rem distributed under the License is distributed on an "AS IS" BASIS,
++@rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++@rem See the License for the specific language governing permissions and
++@rem limitations under the License.
++@rem
++
+ @if "%DEBUG%" == "" @echo off
+ @rem ##########################################################################
+ @rem
+@@ -14,7 +30,7 @@
+ set APP_HOME=%DIRNAME%
+ 
+ @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
+-set DEFAULT_JVM_OPTS=
++set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
+ 
+ @rem Find java.exe
+ if defined JAVA_HOME goto findJavaFromJavaHome
+Index: app/src/main/java/android/eservices/webrequests/data/entity/BookEntity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/data/entity/BookEntity.java	(date 1611227539983)
++++ app/src/main/java/android/eservices/webrequests/data/entity/BookEntity.java	(date 1611227539983)
+@@ -0,0 +1,77 @@
++package android.eservices.webrequests.data.entity;
++
++import androidx.annotation.NonNull;
++import androidx.room.ColumnInfo;
++import androidx.room.Entity;
++import androidx.room.PrimaryKey;
++
++@Entity
++public class BookEntity {
++    @NonNull
++    @PrimaryKey
++    public String id;
++    public String title;
++    public String authors;
++    private String description;
++    private String language;
++    private String thumbUrl;
++
++    @ColumnInfo(name = "published_date")
++    private String publishedDate;
++
++    public String getId() {
++        return id;
++    }
++
++    public void setId(String id) {
++        this.id = id;
++    }
++
++    public String getTitle() {
++        return title;
++    }
++
++    public void setTitle(String title) {
++        this.title = title;
++    }
++
++    public String getAuthors() {
++        return authors;
++    }
++
++    public void setAuthors(String authors) {
++        this.authors = authors;
++    }
++
++    public String getDescription() {
++        return description;
++    }
++
++    public void setDescription(String description) {
++        this.description = description;
++    }
++
++    public String getLanguage() {
++        return language;
++    }
++
++    public void setLanguage(String language) {
++        this.language = language;
++    }
++
++    public String getPublishedDate() {
++        return publishedDate;
++    }
++
++    public void setPublishedDate(String publishedDate) {
++        this.publishedDate = publishedDate;
++    }
++
++    public String getThumbUrl() {
++        return thumbUrl;
++    }
++
++    public void setThumbUrl(String thumbUrl) {
++        this.thumbUrl = thumbUrl;
++    }
++}
+Index: app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayDataRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayDataRepository.java	(date 1611226834505)
++++ app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayDataRepository.java	(date 1611226834505)
+@@ -0,0 +1,18 @@
++package android.eservices.webrequests.data.repository.bookdisplay;
++
++import android.eservices.webrequests.data.api.model.BookSearchResponse;
++
++import io.reactivex.Single;
++
++public class BookDisplayDataRepository implements BookDisplayRepository {
++    private BookDisplayRemoteDataSource bookDisplayRemoteDataSource;
++
++    public BookDisplayDataRepository(BookDisplayRemoteDataSource bookDisplayRemoteDataSource) {
++        this.bookDisplayRemoteDataSource = bookDisplayRemoteDataSource;
++    }
++
++    @Override
++    public Single<BookSearchResponse> getBookSearchResponse(String keywords) {
++        return bookDisplayRemoteDataSource.getBookSearchResponse(keywords);
++    }
++}
+Index: app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayRepository.java	(date 1611226834509)
++++ app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayRepository.java	(date 1611226834509)
+@@ -0,0 +1,10 @@
++package android.eservices.webrequests.data.repository.bookdisplay;
++
++import android.eservices.webrequests.data.api.model.BookSearchResponse;
++
++import io.reactivex.Single;
++
++public interface BookDisplayRepository {
++
++    Single<BookSearchResponse> getBookSearchResponse(String keywords);
++}
+Index: app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayLocalDataSource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayLocalDataSource.java	(date 1611226180543)
++++ app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayLocalDataSource.java	(date 1611226180543)
+@@ -0,0 +1,24 @@
++package android.eservices.webrequests.data.repository.bookdisplay;
++
++import android.eservices.webrequests.BookApplication;
++import android.eservices.webrequests.data.api.BookDisplayService;
++import android.eservices.webrequests.data.api.model.Book;
++import android.eservices.webrequests.data.api.model.BookSearchResponse;
++
++import io.reactivex.Single;
++
++public class BookDisplayLocalDataSource {
++    private BookDisplayService bookDisplayService;
++
++    public void BookDisplayRemoteDataSource(BookDisplayService bookDisplayService) {
++        this.bookDisplayService = bookDisplayService;
++    }
++
++    public Single<BookSearchResponse> getBookSearchResponse(String keywords) {
++        return bookDisplayService.searchBooks(keywords, BookApplication.API_KEY);
++    }
++
++    public Single<Book> getBookDetails(String bookId) {
++        return bookDisplayService.getBook(bookId, BookApplication.API_KEY);
++    }
++}
+Index: app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookToBookEntityMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookToBookEntityMapper.java	(date 1611227631996)
++++ app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookToBookEntityMapper.java	(date 1611227631996)
+@@ -0,0 +1,24 @@
++package android.eservices.webrequests.data.repository.bookdisplay;
++
++import android.eservices.webrequests.data.api.model.Book;
++import android.eservices.webrequests.data.entity.BookEntity;
++import android.text.TextUtils;
++
++public class BookToBookEntityMapper {
++
++    public BookEntity map(Book book) {
++        BookEntity bookEntity = new BookEntity();
++        bookEntity.setTitle(book.getVolumeInfo().getTitle());
++        if (book.getVolumeInfo().getAuthorList() == null) {
++            bookEntity.setAuthors("N.C.");
++        } else {
++            bookEntity.setAuthors(TextUtils.join(", ", book.getVolumeInfo().getAuthorList()));
++        }
++        bookEntity.setDescription(book.getVolumeInfo().getDescription());
++        bookEntity.setId(book.getId());
++        bookEntity.setLanguage(book.getVolumeInfo().getLanguage());
++        bookEntity.setPublishedDate(book.getVolumeInfo().getPublishedDate());
++        bookEntity.setThumbUrl(book.getVolumeInfo().getImageLinks().getThumbnail());
++        return bookEntity;
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/android/eservices/webrequests/data/api/BookDisplayService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/data/api/BookDisplayService.java	(date 1611224212298)
++++ app/src/main/java/android/eservices/webrequests/data/api/BookDisplayService.java	(date 1611224212298)
+@@ -0,0 +1,17 @@
++package android.eservices.webrequests.data.api;
++
++import android.eservices.webrequests.data.api.model.Book;
++import android.eservices.webrequests.data.api.model.BookSearchResponse;
++
++import io.reactivex.Single;
++import retrofit2.http.GET;
++import retrofit2.http.Path;
++import retrofit2.http.Query;
++
++public interface BookDisplayService {
++    @GET("volumes")
++    Single<BookSearchResponse> searchBooks(@Query("q") String keywords, @Query("key") String apiKey);
++
++    @GET("volumes/{bookId}")
++    Single<Book> getBook(@Path("bookId") String bookId, @Query("key") String apiKey);
++}
+Index: app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayRemoteDataSource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayRemoteDataSource.java	(date 1611226718275)
++++ app/src/main/java/android/eservices/webrequests/data/repository/bookdisplay/BookDisplayRemoteDataSource.java	(date 1611226718275)
+@@ -0,0 +1,19 @@
++package android.eservices.webrequests.data.repository.bookdisplay;
++
++import android.eservices.webrequests.BookApplication;
++import android.eservices.webrequests.data.api.BookDisplayService;
++import android.eservices.webrequests.data.api.model.BookSearchResponse;
++
++import io.reactivex.Single;
++
++public class BookDisplayRemoteDataSource {
++    private BookDisplayService bookDisplayService;
++
++    public BookDisplayRemoteDataSource(BookDisplayService bookDisplayService) {
++        this.bookDisplayService = bookDisplayService;
++    }
++
++    public Single<BookSearchResponse> getBookSearchResponse(String keywords) {
++        return bookDisplayService.searchBooks(keywords, BookApplication.API_KEY);
++    }
++}
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/compiler.xml	(date 1611222119052)
++++ .idea/compiler.xml	(date 1611222119052)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <bytecodeTargetLevel target="1.8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <compositeConfiguration>\r\n          <compositeBuild compositeDefinitionSource=\"SCRIPT\" />\r\n        </compositeConfiguration>\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(revision 73a158d096ecbeda05807f13ab6dcf5ad8ff03f8)
++++ .idea/gradle.xml	(date 1611222119057)
+@@ -1,14 +1,20 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <compositeConfiguration>
+-          <compositeBuild compositeDefinitionSource="SCRIPT" />
+-        </compositeConfiguration>
++        <option name="testRunner" value="PLATFORM" />
+         <option name="distributionType" value="DEFAULT_WRAPPED" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="modules">
++          <set>
++            <option value="$PROJECT_DIR$" />
++            <option value="$PROJECT_DIR$/app" />
++          </set>
++        </option>
+         <option name="resolveModulePerSourceSet" value="false" />
++        <option name="useQualifiedModuleNames" value="true" />
+       </GradleProjectSettings>
+     </option>
+   </component>
+Index: app/src/main/java/android/eservices/webrequests/data/di/FakeDependencyInjection.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package android.eservices.webrequests.data.di;\r\n\r\nimport android.content.Context;\r\nimport android.eservices.webrequests.data.api.BookDisplayService;\r\nimport android.eservices.webrequests.data.db.BookDatabase;\r\nimport android.eservices.webrequests.data.repository.bookdisplay.BookDisplayDataRepository;\r\nimport android.eservices.webrequests.data.repository.bookdisplay.BookDisplayRepository;\r\nimport android.eservices.webrequests.data.repository.bookdisplay.local.BookDisplayLocalDataSource;\r\nimport android.eservices.webrequests.data.repository.bookdisplay.mapper.BookToBookEntityMapper;\r\nimport android.eservices.webrequests.data.repository.bookdisplay.remote.BookDisplayRemoteDataSource;\r\nimport android.eservices.webrequests.presentation.viewmodel.ViewModelFactory;\r\n\r\nimport androidx.room.Room;\r\n\r\nimport com.facebook.stetho.okhttp3.StethoInterceptor;\r\nimport com.google.gson.Gson;\r\n\r\nimport okhttp3.OkHttpClient;\r\nimport okhttp3.logging.HttpLoggingInterceptor;\r\nimport retrofit2.Retrofit;\r\nimport retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;\r\nimport retrofit2.converter.gson.GsonConverterFactory;\r\n\r\n/**\r\n * Please never do that in a production app. Ever.\r\n * For the purpose of our course, this is the best option to cover interesting topics as\r\n * we don't have time to dig into Dependency Injection frameworks such as the famous Dagger.\r\n * Singleton are compulsory for some classes, such as the one here. If you don't know why, then ask me.\r\n * Note that this god object doesn't handle Scopes nor component lifecycles so this really shouldn't be\r\n * the way to go when you master the craft of your software.\r\n */\r\npublic class FakeDependencyInjection {\r\n\r\n    private static BookDisplayService bookDisplayService;\r\n    private static Retrofit retrofit;\r\n    private static Gson gson;\r\n    private static BookDisplayRepository bookDisplayRepository;\r\n    private static BookDatabase bookDatabase;\r\n    private static Context applicationContext;\r\n    private static ViewModelFactory viewModelFactory;\r\n\r\n    public static ViewModelFactory getViewModelFactory() {\r\n        if (viewModelFactory == null) {\r\n            viewModelFactory = new ViewModelFactory(getBookDisplayRepository());\r\n        }\r\n        return viewModelFactory;\r\n    }\r\n\r\n\r\n    public static BookDisplayRepository getBookDisplayRepository() {\r\n        if (bookDisplayRepository == null) {\r\n            bookDisplayRepository = new BookDisplayDataRepository(\r\n                    new BookDisplayLocalDataSource(getBookDatabase()),\r\n                    new BookDisplayRemoteDataSource(getBookDisplayService()),\r\n                    new BookToBookEntityMapper()\r\n            );\r\n        }\r\n        return bookDisplayRepository;\r\n    }\r\n\r\n    public static BookDisplayService getBookDisplayService() {\r\n        if (bookDisplayService == null) {\r\n            bookDisplayService = getRetrofit().create(BookDisplayService.class);\r\n        }\r\n        return bookDisplayService;\r\n    }\r\n\r\n    public static Retrofit getRetrofit() {\r\n        if (retrofit == null) {\r\n            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();\r\n            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);\r\n            OkHttpClient client = new OkHttpClient.Builder()\r\n                    .addInterceptor(interceptor)\r\n                    .addNetworkInterceptor(new StethoInterceptor())\r\n                    .build();\r\n\r\n            retrofit = new Retrofit.Builder()\r\n                    .baseUrl(\"https://www.googleapis.com/books/v1/\")\r\n                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())\r\n                    .client(client)\r\n                    .addConverterFactory(GsonConverterFactory.create(getGson()))\r\n                    .build();\r\n        }\r\n        return retrofit;\r\n    }\r\n\r\n    public static Gson getGson() {\r\n        if (gson == null) {\r\n            gson = new Gson();\r\n        }\r\n        return gson;\r\n    }\r\n\r\n    public static void setContext(Context context) {\r\n        applicationContext = context;\r\n    }\r\n\r\n    public static BookDatabase getBookDatabase() {\r\n        if (bookDatabase == null) {\r\n            bookDatabase = Room.databaseBuilder(applicationContext,\r\n                    BookDatabase.class, \"book-database\").build();\r\n        }\r\n        return bookDatabase;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/android/eservices/webrequests/data/di/FakeDependencyInjection.java	(revision 73a158d096ecbeda05807f13ab6dcf5ad8ff03f8)
++++ app/src/main/java/android/eservices/webrequests/data/di/FakeDependencyInjection.java	(date 1611226042035)
+@@ -5,9 +5,9 @@
+ import android.eservices.webrequests.data.db.BookDatabase;
+ import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayDataRepository;
+ import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayRepository;
+-import android.eservices.webrequests.data.repository.bookdisplay.local.BookDisplayLocalDataSource;
+-import android.eservices.webrequests.data.repository.bookdisplay.mapper.BookToBookEntityMapper;
+-import android.eservices.webrequests.data.repository.bookdisplay.remote.BookDisplayRemoteDataSource;
++import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayLocalDataSource;
++import android.eservices.webrequests.data.repository.bookdisplay.BookToBookEntityMapper;
++import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayRemoteDataSource;
+ import android.eservices.webrequests.presentation.viewmodel.ViewModelFactory;
+ 
+ import androidx.room.Room;
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_7\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision 73a158d096ecbeda05807f13ab6dcf5ad8ff03f8)
++++ .idea/misc.xml	(date 1611222119040)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
