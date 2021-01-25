@@ -1,16 +1,10 @@
 package android.eservices.webrequests.data.di;
 
 import android.content.Context;
-import android.eservices.webrequests.data.api.BookDisplayService;
-import android.eservices.webrequests.data.db.BookDatabase;
-import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayDataRepository;
-import android.eservices.webrequests.data.repository.bookdisplay.BookDisplayRepository;
-import android.eservices.webrequests.data.repository.bookdisplay.local.BookDisplayLocalDataSource;
-import android.eservices.webrequests.data.repository.bookdisplay.mapper.BookToBookEntityMapper;
-import android.eservices.webrequests.data.repository.bookdisplay.remote.BookDisplayRemoteDataSource;
+import android.eservices.webrequests.data.api.service.TournamentService;
+import android.eservices.webrequests.data.repository.tournament.ITournamentRepository;
+import android.eservices.webrequests.data.repository.tournament.TournamentRepository;
 import android.eservices.webrequests.presentation.viewmodel.ViewModelFactory;
-
-import androidx.room.Room;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
@@ -31,11 +25,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class FakeDependencyInjection {
 
-    private static BookDisplayService bookDisplayService;
+    private static TournamentService tournamentService;
     private static Retrofit retrofit;
     private static Gson gson;
-    private static BookDisplayRepository bookDisplayRepository;
-    private static BookDatabase bookDatabase;
+    private static ITournamentRepository bookDisplayRepository;
     private static Context applicationContext;
     private static ViewModelFactory viewModelFactory;
 
@@ -46,23 +39,18 @@ public class FakeDependencyInjection {
         return viewModelFactory;
     }
 
-
-    public static BookDisplayRepository getBookDisplayRepository() {
+    public static ITournamentRepository getBookDisplayRepository() {
         if (bookDisplayRepository == null) {
-            bookDisplayRepository = new BookDisplayDataRepository(
-                    new BookDisplayLocalDataSource(getBookDatabase()),
-                    new BookDisplayRemoteDataSource(getBookDisplayService()),
-                    new BookToBookEntityMapper()
-            );
+            bookDisplayRepository = new TournamentRepository(getTournamentService());
         }
         return bookDisplayRepository;
     }
 
-    public static BookDisplayService getBookDisplayService() {
-        if (bookDisplayService == null) {
-            bookDisplayService = getRetrofit().create(BookDisplayService.class);
+    public static TournamentService getTournamentService() {
+        if (tournamentService == null) {
+            tournamentService = getRetrofit().create(TournamentService.class);
         }
-        return bookDisplayService;
+        return tournamentService;
     }
 
     public static Retrofit getRetrofit() {
@@ -75,7 +63,7 @@ public class FakeDependencyInjection {
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://www.googleapis.com/books/v1/")
+                    .baseUrl("https://apichamps.herokuapp.com/")
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create(getGson()))
@@ -93,13 +81,5 @@ public class FakeDependencyInjection {
 
     public static void setContext(Context context) {
         applicationContext = context;
-    }
-
-    public static BookDatabase getBookDatabase() {
-        if (bookDatabase == null) {
-            bookDatabase = Room.databaseBuilder(applicationContext,
-                    BookDatabase.class, "book-database").build();
-        }
-        return bookDatabase;
     }
 }

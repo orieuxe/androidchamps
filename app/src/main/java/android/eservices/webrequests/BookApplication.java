@@ -13,8 +13,6 @@ import com.facebook.stetho.Stetho;
  */
 public class BookApplication extends Application {
 
-    public static final String API_KEY = "AIzaSyBd1IFgqsRZgDNDCMqycRwNEPehfk2XqkM";
-
     @Override
     public void onCreate() {
         super.onCreate();
