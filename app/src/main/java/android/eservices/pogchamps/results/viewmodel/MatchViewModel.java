@@ -55,4 +55,27 @@ public class MatchViewModel extends ViewModel {
             }));
         return matchs;
     }
+
+    public MutableLiveData<List<Match>> getMatchsOf(int participantId) {
+        isDataLoading.postValue(true);
+        matchs = new MutableLiveData<>();
+        Log.d(TAG, "getMatchsOf: "+participantId);
+        compositeDisposable.add(matchRepository.getMatchsOf(participantId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(new DisposableSingleObserver<List<Match>>() {
+                @Override
+                public void onSuccess(@NonNull List<Match> matchList) {
+                    matchs.setValue(matchList);
+                    isDataLoading.setValue(false);
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+                    System.out.println(e.toString());
+                    isDataLoading.setValue(false);
+                }
+            }));
+        return matchs;
+    }
 }

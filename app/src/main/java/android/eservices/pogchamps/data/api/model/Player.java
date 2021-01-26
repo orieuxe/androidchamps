@@ -1,6 +1,8 @@
 package android.eservices.pogchamps.data.api.model;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     private int id;
     private String twitch;
     private String username;

@@ -1,8 +1,11 @@
 package android.eservices.pogchamps.results.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.eservices.pogchamps.R;
 import android.eservices.pogchamps.data.api.model.Participant;
 import android.eservices.pogchamps.data.api.model.Player;
+import android.eservices.pogchamps.results.ParticipantActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,31 +25,31 @@ import io.reactivex.annotations.NonNull;
 public class ParticipantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "poggers";
 
-    public static class ParticipantViewHolder extends RecyclerView.ViewHolder {
+    public static class ParticipantViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener  {
+        private static final String PARTICIPANT = "participant";
         private TextView twitchTextView;
         private TextView usernameTextView;
         private ImageView iconImageView;
         private TextView pointsTextView;
         private TextView playedTextView;
         private View v;
+        private Participant participant;
         private static final String TAG = "poggers";
 
         public ParticipantViewHolder(View v) {
             super(v);
             this.v = v;
+            v.setOnClickListener(this);
             twitchTextView = v.findViewById(R.id.player_twitch);
             usernameTextView = v.findViewById(R.id.player_username);
             iconImageView = v.findViewById(R.id.player_icon);
             pointsTextView = v.findViewById(R.id.player_points);
             playedTextView = v.findViewById(R.id.player_played);
-            setupListeners();
         }
 
-        private void setupListeners() {
-
-        }
 
         void bind(Participant participant) {
+            this.participant = participant;
             Player p = participant.getPlayer();
             twitchTextView.setText(p.getTwitch());
             usernameTextView.setText(p.getUsername());
@@ -60,6 +63,13 @@ public class ParticipantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         }
 
+        @Override
+        public void onClick(View view) {
+            Context context = view.getContext();
+            Intent intent = new Intent(context, ParticipantActivity.class);
+            intent.putExtra(PARTICIPANT, participant);
+            context.startActivity(intent);
+        }
     }
 
     private static class GroupViewHolder extends RecyclerView.ViewHolder {

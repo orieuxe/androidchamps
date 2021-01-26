@@ -1,6 +1,8 @@
 package android.eservices.pogchamps.data.api.model;
 
-public class Participant {
+import java.io.Serializable;
+
+public class Participant implements Serializable {
     private int id;
     private Tournament tournament;
     private int points;

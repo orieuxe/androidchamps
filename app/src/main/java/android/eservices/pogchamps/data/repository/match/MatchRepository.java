@@ -19,4 +19,9 @@ public class MatchRepository implements IMatchRepository {
     public Single<List<Match>> getMatchsFromStage(int tournamentId, String stage) {
         return matchService.getMatchsFromStage(tournamentId, stage);
     }
+
+    @Override
+    public Single<List<Match>> getMatchsOf(int participantId) {
+        return matchService.getMatchsOf(participantId);
+    }
 }

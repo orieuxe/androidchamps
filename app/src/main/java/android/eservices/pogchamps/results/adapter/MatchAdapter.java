@@ -22,9 +22,10 @@ import java.util.Locale;
 import io.reactivex.annotations.NonNull;
 
 public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String PLAYER_ID = "playerId";
     private static final String TAG = "poggers";
 
-    public static class MatchViewHolder extends RecyclerView.ViewHolder {
+    public static class MatchViewHolder extends RecyclerView.ViewHolder{
         private TextView titleTextView;
         private TextView resultTextView;
         private TextView dateTextView;
@@ -40,15 +41,9 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             dateTextView = v.findViewById(R.id.match_date);
             icon1ImageView = v.findViewById(R.id.player1_icon);
             icon2ImageView = v.findViewById(R.id.player2_icon);
-            setupListeners();
-        }
-
-        private void setupListeners() {
-
         }
 
         void bind(Match match) {
-
             Player p1 = match.getParticipant1().getPlayer();
             Player p2 = match.getParticipant2().getPlayer();
             titleTextView.setText(String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
@@ -68,7 +63,6 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .circleCrop()
                     .into(icon2ImageView);
         }
-
     }
 
     private static class RoundViewHolder extends RecyclerView.ViewHolder {

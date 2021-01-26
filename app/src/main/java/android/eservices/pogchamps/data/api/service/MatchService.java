@@ -11,4 +11,7 @@ import retrofit2.http.Path;
 public interface MatchService {
     @GET("duel/{tournamentId}/stage/{stage}")
     Single<List<Match>> getMatchsFromStage(@Path("tournamentId") int tournamentId, @Path("stage") String stage);
+
+    @GET("/duel/of/{participantId}")
+    Single<List<Match>> getMatchsOf(@Path("participantId") int participantId);
 }
