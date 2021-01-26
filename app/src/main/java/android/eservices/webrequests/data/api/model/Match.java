@@ -12,6 +12,7 @@ public class Match {
     private String round;
     private Date date;
     private String stage;
+    private Match next_duel;
     private Tournament tournament;
 
     public int getId() {
@@ -48,5 +49,9 @@ public class Match {
 
     public List<Game> getGames() {
         return games;
+    }
+
+    public Match getNextMatch(){
+        return this.next_duel;
     }
 }

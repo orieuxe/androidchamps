@@ -3,7 +3,6 @@ package android.eservices.webrequests.presentation.results.groupstage.adapter;
 import android.eservices.webrequests.R;
 import android.eservices.webrequests.data.api.model.Participant;
 import android.eservices.webrequests.data.api.model.Player;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +66,7 @@ public class ParticipantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private TextView groupTextView;
         public GroupViewHolder(View v) {
             super(v);
-            this.groupTextView = v.findViewById(R.id.group_name);
+            this.groupTextView = v.findViewById(R.id.header_label);
         }
 
         void bind(Character group) {
@@ -92,6 +91,10 @@ public class ParticipantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
+    public void clearViewModels(){
+        this.participantList.clear();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (position == 0)
@@ -100,7 +103,6 @@ public class ParticipantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return TYPE_PARTICIPANT;
     }
 
-    // Create new views (invoked by the layout manager)
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

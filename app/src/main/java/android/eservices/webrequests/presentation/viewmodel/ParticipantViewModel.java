@@ -26,7 +26,7 @@ public class ParticipantViewModel extends ViewModel {
     }
 
     private MutableLiveData<List<Participant>> participants;
-    private final MutableLiveData<Boolean> isDataLoading = new MutableLiveData<Boolean>();
+    private final MutableLiveData<Boolean> isDataLoading = new MutableLiveData<>();
 
 
     public MutableLiveData<Boolean> getIsDataLoading() {
@@ -36,7 +36,6 @@ public class ParticipantViewModel extends ViewModel {
     public MutableLiveData<List<Participant>> getParticipantsFrom(int tournamentId, Character group) {
         isDataLoading.postValue(true);
         participants = new MutableLiveData<>();
-        Log.d(TAG, "getParticipantsFrom: "+tournamentId+' '+group);
         compositeDisposable.add(participantRepository.getParticipantsFrom(tournamentId, group)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,7 +47,7 @@ public class ParticipantViewModel extends ViewModel {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(@NonNull Throwable e) {
                         System.out.println(e.toString());
                         isDataLoading.setValue(false);
                     }

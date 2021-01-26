@@ -6,7 +6,7 @@
 
 
     <TextView
-        android:id="@+id/group_name"
+        android:id="@+id/header_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"

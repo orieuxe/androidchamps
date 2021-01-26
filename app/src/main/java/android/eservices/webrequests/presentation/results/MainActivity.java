@@ -131,7 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateFragments() {
         for(TournamentFragment fragment:fragments) {
-            fragment.retrieveResults(getCurrentTournamentId());
+            if(fragment.getView() != null){
+                fragment.retrieveResults(getCurrentTournamentId());
+            }else {
+                fragment.getArguments().putInt(TOURNAMENT_ID, getCurrentTournamentId());
+            }
         }
     }
 

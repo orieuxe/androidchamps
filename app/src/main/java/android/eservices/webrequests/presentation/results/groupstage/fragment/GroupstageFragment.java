@@ -7,9 +7,7 @@ import android.eservices.webrequests.presentation.results.TournamentFragment;
 import android.eservices.webrequests.presentation.results.groupstage.adapter.ParticipantAdapter;
 import android.eservices.webrequests.presentation.viewmodel.ParticipantViewModel;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,7 +30,7 @@ public class GroupstageFragment extends TournamentFragment {
     private static final char[] groups = "ABCD".toCharArray();
     private View rootView;
     private ParticipantViewModel participantViewModel;
-    private Map<Character, RecyclerView> recyclerViews = new HashMap<>();
+    private Map<Character, ParticipantAdapter> adapters = new HashMap<>();
 
     private GroupstageFragment() {}
 
@@ -61,10 +59,11 @@ public class GroupstageFragment extends TournamentFragment {
     private void setupGroupRecyclerView(Character group) {
         int id = getResources().getIdentifier("group_"+group.toString(), "id", getContext().getPackageName());
         RecyclerView recyclerView = rootView.findViewById(id);
-        recyclerView.setAdapter(new ParticipantAdapter());
+        ParticipantAdapter adapter = new ParticipantAdapter();
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerViews.put(group, recyclerView);
+        adapters.put(group, adapter);
     }
 
     private void registerViewModels() {
@@ -75,15 +74,13 @@ public class GroupstageFragment extends TournamentFragment {
     @Override
     public void retrieveResults(int tournamentId) {
         for (Character g: groups){
-            ParticipantAdapter adapter = (ParticipantAdapter) recyclerViews.get(g).getAdapter();
-            adapter.bindViewModels(new ArrayList<Participant>(), g);
+            adapters.get(g).clearViewModels();
             participantViewModel.getParticipantsFrom(tournamentId, g).observe(getViewLifecycleOwner(), new Observer<List<Participant>>() {
                 @Override
                 public void onChanged(List<Participant> participants) {
-                    if (participants.isEmpty()) return;
-                    Character group = participants.get(0).getGroupe();
-                    ParticipantAdapter adapter = (ParticipantAdapter) recyclerViews.get(group).getAdapter();
-                    adapter.bindViewModels(participants, group);
+                if (participants.isEmpty()) return;
+                Character group = participants.get(0).getGroupe();
+                adapters.get(group).bindViewModels(participants, group);
                 }
             });
         }

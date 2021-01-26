@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Pogchamps</string>
     <string name="pogchamps_select">Select a pogchamps edition</string>
+    <string name="player_image">player image</string>
 </resources>

@@ -1,8 +1,11 @@
 package android.eservices.webrequests.data.di;
 
 import android.content.Context;
+import android.eservices.webrequests.data.api.service.MatchService;
 import android.eservices.webrequests.data.api.service.ParticipantService;
 import android.eservices.webrequests.data.api.service.TournamentService;
+import android.eservices.webrequests.data.repository.match.IMatchRepository;
+import android.eservices.webrequests.data.repository.match.MatchRepository;
 import android.eservices.webrequests.data.repository.participant.IParticipantRepository;
 import android.eservices.webrequests.data.repository.participant.ParticipantRepository;
 import android.eservices.webrequests.data.repository.tournament.ITournamentRepository;
@@ -30,16 +33,18 @@ public class FakeDependencyInjection {
 
     private static TournamentService tournamentService;
     private static ParticipantService participantService;
+    private static MatchService matchService;
     private static Retrofit retrofit;
     private static Gson gson;
     private static ITournamentRepository tournamentRepository;
     private static IParticipantRepository participantRepository;
+    private static IMatchRepository matchRepository;
     private static Context applicationContext;
     private static ViewModelFactory viewModelFactory;
 
     public static ViewModelFactory getViewModelFactory() {
         if (viewModelFactory == null) {
-            viewModelFactory = new ViewModelFactory(getTournamentRepository(), getParticipantRepository());
+            viewModelFactory = new ViewModelFactory(getTournamentRepository(), getParticipantRepository(), getMatchRepository());
         }
         return viewModelFactory;
     }
@@ -58,6 +63,13 @@ public class FakeDependencyInjection {
         return participantRepository;
     }
 
+    public static IMatchRepository getMatchRepository() {
+        if (matchRepository == null) {
+            matchRepository = new MatchRepository(getMatchService());
+        }
+        return matchRepository;
+    }
+
     public static TournamentService getTournamentService() {
         if (tournamentService == null) {
             tournamentService = getRetrofit().create(TournamentService.class);
@@ -70,6 +82,13 @@ public class FakeDependencyInjection {
             participantService = getRetrofit().create(ParticipantService.class);
         }
         return participantService;
+    }
+
+    public static MatchService getMatchService() {
+        if (matchService == null) {
+            matchService = getRetrofit().create(MatchService.class);
+        }
+        return matchService;
     }
 
     public static Retrofit getRetrofit() {

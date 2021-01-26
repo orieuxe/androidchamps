@@ -3,6 +3,7 @@ package android.eservices.webrequests.presentation.results.bracket.adapter;
 import android.eservices.webrequests.R;
 import android.eservices.webrequests.data.api.model.Match;
 import android.eservices.webrequests.data.api.model.Player;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,12 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.annotations.NonNull;
 
-public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHolder> {
-
+public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = "poggers";
 
     public static class MatchViewHolder extends RecyclerView.ViewHolder {
         private TextView titleTextView;
@@ -38,7 +40,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
             resultTextView = v.findViewById(R.id.match_result);
             dateTextView = v.findViewById(R.id.match_date);
             icon1ImageView = v.findViewById(R.id.player1_icon);
-            icon2ImageView = v.findViewById(R.id.player1_icon);
+            icon2ImageView = v.findViewById(R.id.player2_icon);
             setupListeners();
         }
 
@@ -52,7 +54,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
             Player p2 = match.getParticipant2().getPlayer();
             titleTextView.setText(String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
             resultTextView.setText(match.getResult());
-            dateTextView.setText((new SimpleDateFormat("dd MM yyyy")).format(match.getDate()));
+            dateTextView.setText((new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH)).format(match.getDate()));
             Glide.with(v)
                     .load(p1.getIconUrl())
                     .centerCrop()
@@ -70,41 +72,69 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
 
     }
 
-    private List<Match> matchList;
+    private static class RoundViewHolder extends RecyclerView.ViewHolder {
+        private TextView roundTextView;
+        public RoundViewHolder(View v) {
+            super(v);
+            this.roundTextView = v.findViewById(R.id.header_label);
+        }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public MatchAdapter() {
-        matchList = new ArrayList<>();
+        void bind(String round) {
+            roundTextView.setText(round);
+        }
     }
 
-    public void bindViewModels(List<Match> matchList) {
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_MATCH = 1;
+    private List<Match> matchList;
+    private String round; 
+    
+    public MatchAdapter() {
+        matchList = new ArrayList<>();
+        round = "";
+    }
+
+    public void bindViewModels(List<Match> matchList, String round) {
         this.matchList.clear();
         this.matchList.addAll(matchList);
+        this.round = round;
         notifyDataSetChanged();
     }
 
-    // Create new views (invoked by the layout manager)
+    public void clearViewModels(){
+        this.matchList.clear();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0)
+            return TYPE_HEADER;
+
+        return TYPE_MATCH;
+    }
+
     @NonNull
     @Override
-    public MatchViewHolder onCreateViewHolder(ViewGroup parent,
-                                              int viewType) {
-        // create a new view
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == TYPE_HEADER){
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false);
+            return new RoundViewHolder(v);
+        }
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_match, parent, false);
         return new MatchViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MatchViewHolder holder, int position) {
-        holder.bind(matchList.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof MatchViewHolder){
+            ((MatchViewHolder) holder).bind(matchList.get(position - 1));
+        }else if(holder instanceof RoundViewHolder){
+            ((RoundViewHolder) holder).bind(round);
+        }
     }
 
-
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return matchList.size();
+        return matchList.size() + 1;
     }
-
-
 }
