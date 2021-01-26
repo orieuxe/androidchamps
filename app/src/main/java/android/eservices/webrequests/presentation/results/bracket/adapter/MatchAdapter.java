@@ -1,8 +1,8 @@
-package android.eservices.webrequests.presentation.bookdisplay.bracket.adapter;
+package android.eservices.webrequests.presentation.results.bracket.adapter;
 
 import android.eservices.webrequests.R;
-import android.eservices.webrequests.presentation.viewmodel.MatchViewModel;
-import android.eservices.webrequests.presentation.viewmodel.PlayerViewModel;
+import android.eservices.webrequests.data.api.model.Match;
+import android.eservices.webrequests.data.api.model.Player;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +31,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
         private ImageView icon2ImageView;
         private View v;
 
-        public MatchViewHolder(View v, final MatchInterface matchInterface) {
+        public MatchViewHolder(View v) {
             super(v);
             this.v = v;
             titleTextView = v.findViewById(R.id.match_title);
@@ -46,13 +46,13 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
 
         }
 
-        void bind(MatchViewModel matchViewModel) {
+        void bind(Match match) {
 
-            PlayerViewModel p1 = matchViewModel.getParticipant1().getPlayer();
-            PlayerViewModel p2 = matchViewModel.getParticipant2().getPlayer();
+            Player p1 = match.getParticipant1().getPlayer();
+            Player p2 = match.getParticipant2().getPlayer();
             titleTextView.setText(String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
-            resultTextView.setText(matchViewModel.getResult());
-            dateTextView.setText((new SimpleDateFormat("dd MM yyyy")).format(matchViewModel.getDate()));
+            resultTextView.setText(match.getResult());
+            dateTextView.setText((new SimpleDateFormat("dd MM yyyy")).format(match.getDate()));
             Glide.with(v)
                     .load(p1.getIconUrl())
                     .centerCrop()
@@ -70,18 +70,16 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
 
     }
 
-    private List<MatchViewModel> matchViewModelList;
-    private MatchInterface bookActionInterface;
+    private List<Match> matchList;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MatchAdapter(MatchInterface bookActionInterface) {
-        matchViewModelList = new ArrayList<>();
-        this.bookActionInterface = bookActionInterface;
+    public MatchAdapter() {
+        matchList = new ArrayList<>();
     }
 
-    public void bindViewModels(List<MatchViewModel> matchViewModelList) {
-        this.matchViewModelList.clear();
-        this.matchViewModelList.addAll(matchViewModelList);
+    public void bindViewModels(List<Match> matchList) {
+        this.matchList.clear();
+        this.matchList.addAll(matchList);
         notifyDataSetChanged();
     }
 
@@ -91,22 +89,21 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHol
     public MatchViewHolder onCreateViewHolder(ViewGroup parent,
                                               int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_player, parent, false);
-        return new MatchViewHolder(v, bookActionInterface);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_match, parent, false);
+        return new MatchViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MatchViewHolder holder, int position) {
-        holder.bind(matchViewModelList.get(position));
+        holder.bind(matchList.get(position));
     }
 
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return matchViewModelList.size();
+        return matchList.size();
     }
 
 

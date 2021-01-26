@@ -18,5 +18,9 @@ public class Player {
     public String getUsername() {
         return username;
     }
+
+    public String getIconUrl(){
+        return "https://pogchamps.chess.com/assets/player/"+this.twitch+".png";
+    }
 }
 

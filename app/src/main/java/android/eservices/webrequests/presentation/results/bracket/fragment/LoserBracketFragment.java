@@ -1,8 +1,9 @@
-package android.eservices.webrequests.presentation.bookdisplay.bracket.fragment;
+package android.eservices.webrequests.presentation.results.bracket.fragment;
 
 import android.eservices.webrequests.R;
-import android.eservices.webrequests.presentation.bookdisplay.bracket.adapter.MatchAdapter;
-import android.eservices.webrequests.presentation.bookdisplay.bracket.adapter.MatchInterface;
+import android.eservices.webrequests.data.api.model.Tournament;
+import android.eservices.webrequests.presentation.results.TournamentFragment;
+import android.eservices.webrequests.presentation.results.bracket.adapter.MatchAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class LoserBracketFragment extends Fragment implements MatchInterface {
+public class LoserBracketFragment extends TournamentFragment {
 
     public static final String TAB_NAME = "Loser Bracket";
     private View rootView;
@@ -50,7 +51,7 @@ public class LoserBracketFragment extends Fragment implements MatchInterface {
 
     private void setupRecyclerView() {
         recyclerView = rootView.findViewById(R.id.bracket);
-        matchAdapter = new MatchAdapter(this);
+        matchAdapter = new MatchAdapter();
         recyclerView.setAdapter(matchAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

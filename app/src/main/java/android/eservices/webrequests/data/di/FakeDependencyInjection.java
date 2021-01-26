@@ -1,7 +1,10 @@
 package android.eservices.webrequests.data.di;
 
 import android.content.Context;
+import android.eservices.webrequests.data.api.service.ParticipantService;
 import android.eservices.webrequests.data.api.service.TournamentService;
+import android.eservices.webrequests.data.repository.participant.IParticipantRepository;
+import android.eservices.webrequests.data.repository.participant.ParticipantRepository;
 import android.eservices.webrequests.data.repository.tournament.ITournamentRepository;
 import android.eservices.webrequests.data.repository.tournament.TournamentRepository;
 import android.eservices.webrequests.presentation.viewmodel.ViewModelFactory;
@@ -26,24 +29,33 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FakeDependencyInjection {
 
     private static TournamentService tournamentService;
+    private static ParticipantService participantService;
     private static Retrofit retrofit;
     private static Gson gson;
-    private static ITournamentRepository bookDisplayRepository;
+    private static ITournamentRepository tournamentRepository;
+    private static IParticipantRepository participantRepository;
     private static Context applicationContext;
     private static ViewModelFactory viewModelFactory;
 
     public static ViewModelFactory getViewModelFactory() {
         if (viewModelFactory == null) {
-            viewModelFactory = new ViewModelFactory(getBookDisplayRepository());
+            viewModelFactory = new ViewModelFactory(getTournamentRepository(), getParticipantRepository());
         }
         return viewModelFactory;
     }
 
-    public static ITournamentRepository getBookDisplayRepository() {
-        if (bookDisplayRepository == null) {
-            bookDisplayRepository = new TournamentRepository(getTournamentService());
+    public static ITournamentRepository getTournamentRepository() {
+        if (tournamentRepository == null) {
+            tournamentRepository = new TournamentRepository(getTournamentService());
         }
-        return bookDisplayRepository;
+        return tournamentRepository;
+    }
+
+    public static IParticipantRepository getParticipantRepository() {
+        if (participantRepository == null) {
+            participantRepository = new ParticipantRepository(getParticipantService());
+        }
+        return participantRepository;
     }
 
     public static TournamentService getTournamentService() {
@@ -51,6 +63,13 @@ public class FakeDependencyInjection {
             tournamentService = getRetrofit().create(TournamentService.class);
         }
         return tournamentService;
+    }
+
+    public static ParticipantService getParticipantService() {
+        if (participantService == null) {
+            participantService = getRetrofit().create(ParticipantService.class);
+        }
+        return participantService;
     }
 
     public static Retrofit getRetrofit() {

@@ -5,7 +5,7 @@ public class Participant {
     private Tournament tournament;
     private int points;
     private int played;
-    private String group;
+    private Character groupe;
     private Player player;
 
     public int getId() {
@@ -24,8 +24,8 @@ public class Participant {
         return played;
     }
 
-    public String getGroup() {
-        return group;
+    public Character getGroupe() {
+        return groupe;
     }
 
     public Player getPlayer() {

@@ -2,7 +2,6 @@ package android.eservices.webrequests.presentation.viewmodel;
 
 import android.eservices.webrequests.data.api.model.Tournament;
 import android.eservices.webrequests.data.repository.tournament.ITournamentRepository;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -24,29 +24,25 @@ public class TournamentSelectViewModel extends ViewModel {
         this.compositeDisposable = new CompositeDisposable();
     }
 
-    private MutableLiveData<List<TournamentViewModel>> tournaments;
+    private MutableLiveData<List<Tournament>> tournaments;
     private MutableLiveData<Boolean> isDataLoading = new MutableLiveData<Boolean>();
 
     public MutableLiveData<Boolean> getIsDataLoading() {
         return isDataLoading;
     }
 
-    public MutableLiveData<List<TournamentViewModel>> getTournaments() {
+    public MutableLiveData<List<Tournament>> getTournaments() {
         isDataLoading.postValue(true);
         if(this.tournaments == null){
-            tournaments = new MutableLiveData<List<TournamentViewModel>>();
+            tournaments = new MutableLiveData<List<Tournament>>();
             compositeDisposable.clear();
             compositeDisposable.add(tournamentRepository.getAllTournaments()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<Tournament>>() {
                     @Override
-                    public void onSuccess(List<Tournament> tournamentList) {
-                        List<TournamentViewModel> tournamentViewModelList = new ArrayList<>();
-                        for (Tournament tournament: tournamentList) {
-                            tournamentViewModelList.add(new TournamentViewModel(tournament));
-                        }
-                        tournaments.setValue(tournamentViewModelList);
+                    public void onSuccess(@NonNull List<Tournament> tournamentList) {
+                        tournaments.setValue(tournamentList);
                         isDataLoading.setValue(false);
                     }
 
