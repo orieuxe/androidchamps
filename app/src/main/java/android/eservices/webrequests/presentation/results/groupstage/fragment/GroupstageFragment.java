@@ -9,6 +9,7 @@ import android.eservices.webrequests.presentation.viewmodel.ParticipantViewModel
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,7 @@ public class GroupstageFragment extends TournamentFragment {
     public static final String TAG = "poggers";
     private static final char[] groups = "ABCD".toCharArray();
     private View rootView;
+    private ParticipantViewModel participantViewModel;
     private Map<Character, RecyclerView> recyclerViews = new HashMap<>();
 
     private GroupstageFragment() {}
@@ -49,7 +52,7 @@ public class GroupstageFragment extends TournamentFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        for (Character group: groups){
+        for (Character group : groups) {
             setupGroupRecyclerView(group);
         }
         registerViewModels();
@@ -60,23 +63,29 @@ public class GroupstageFragment extends TournamentFragment {
         RecyclerView recyclerView = rootView.findViewById(id);
         recyclerView.setAdapter(new ParticipantAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerViews.put(group, recyclerView);
     }
 
     private void registerViewModels() {
-    ParticipantViewModel participantViewModel = new ViewModelProvider(requireActivity(), FakeDependencyInjection.getViewModelFactory()).get(ParticipantViewModel.class);
-        for (Character group: groups){
-            participantViewModel.getParticipantsFrom(tournamentId, group).observe(getViewLifecycleOwner(), new Observer<List<Participant>>() {
+        participantViewModel = new ViewModelProvider(requireActivity(), FakeDependencyInjection.getViewModelFactory()).get(ParticipantViewModel.class);
+        retrieveResults(tournamentId);
+    }
+
+    @Override
+    public void retrieveResults(int tournamentId) {
+        for (Character g: groups){
+            ParticipantAdapter adapter = (ParticipantAdapter) recyclerViews.get(g).getAdapter();
+            adapter.bindViewModels(new ArrayList<Participant>(), g);
+            participantViewModel.getParticipantsFrom(tournamentId, g).observe(getViewLifecycleOwner(), new Observer<List<Participant>>() {
                 @Override
                 public void onChanged(List<Participant> participants) {
-                    Character group = 'A';
-                    if (participants.size() > 0) {
-                        group = participants.get(0).getGroupe();
-                    }
+                    if (participants.isEmpty()) return;
+                    Character group = participants.get(0).getGroupe();
                     ParticipantAdapter adapter = (ParticipantAdapter) recyclerViews.get(group).getAdapter();
                     adapter.bindViewModels(participants, group);
                 }
             });
-        };
+        }
     }
 }

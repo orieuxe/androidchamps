@@ -51,8 +51,8 @@ public class ParticipantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Player p = participant.getPlayer();
             twitchTextView.setText(p.getTwitch());
             usernameTextView.setText(p.getUsername());
-            pointsTextView.setText(String.valueOf(participant.getPoints())+ " points");
-            playedTextView.setText("played "+String.valueOf(participant.getPlayed()));
+            pointsTextView.setText(String.format("%s points", participant.getPoints()));
+            playedTextView.setText(String.format("played %s", participant.getPlayed()));
             Glide.with(v)
                     .load(p.getIconUrl())
                     .centerCrop()
@@ -71,7 +71,7 @@ public class ParticipantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         void bind(Character group) {
-            groupTextView.setText("group "+group.toString());
+            groupTextView.setText(String.format("group %s", group.toString()));
         }
     }
 

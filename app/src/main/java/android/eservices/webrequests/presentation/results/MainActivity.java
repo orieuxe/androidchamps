@@ -21,12 +21,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.annotations.NonNull;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private TournamentSelectViewModel tournamentSelectViewModel;
+    private List<TournamentFragment> fragments = new ArrayList<>();
     private Toolbar toolbar;
     private static final String TOURNAMENT_ID = "tournamentId";
     private static final String TAG = "poggers";
@@ -47,6 +51,47 @@ public class MainActivity extends AppCompatActivity {
         int colorId = getResources().getIdentifier(getString(R.string.app_name)+tournamentId, "color", getPackageName());
         toolbar.setBackgroundColor(getResources().getColor(colorId));
         setSupportActionBar(toolbar);
+    }
+
+    private void setupViewPagerAndTabs() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(TOURNAMENT_ID, getCurrentTournamentId());
+
+        viewPager = findViewById(R.id.tab_viewpager);
+
+        fragments.add(GroupstageFragment.newInstance());
+        fragments.add(WinnerBracketFragment.newInstance());
+        fragments.add(LoserBracketFragment.newInstance());
+        for(TournamentFragment fragment:fragments) {
+            fragment.setArguments(bundle);
+        }
+
+        viewPager.setAdapter(new FragmentPagerAdapter(
+            getSupportFragmentManager(),
+            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+        ) {
+            @NonNull
+            @Override
+            public Fragment getItem(int position) {
+                return fragments.get(position);
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                if (position == 0) {
+                    return GroupstageFragment.TAB_NAME;
+                }
+                if(position == 1){
+                    return WinnerBracketFragment.TAB_NAME;
+                }
+                return LoserBracketFragment.TAB_NAME;
+            }
+
+            @Override
+            public int getCount() {
+                return 3;
+            }
+        });
     }
 
     private void registerViewModels() {
@@ -73,53 +118,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        this.setCurrentTournamentId(item.getItemId());
-        this.updateToolBar();
+        if(item.getItemId() != getCurrentTournamentId())
+            onTournamentChange(item.getItemId());
         return super.onOptionsItemSelected(item);
     }
 
+    private void onTournamentChange(int tournamentId) {
+        setCurrentTournamentId(tournamentId);
+        updateToolBar();
+        updateFragments();
+    }
 
-    private void setupViewPagerAndTabs() {
-        viewPager = findViewById(R.id.tab_viewpager);
-
-        Bundle bundle = new Bundle();
-        bundle.putInt(TOURNAMENT_ID, getCurrentTournamentId());
-
-        final GroupstageFragment groupstageFragment = GroupstageFragment.newInstance();
-        groupstageFragment.setArguments(bundle);
-        final WinnerBracketFragment winnerBracketFragment = WinnerBracketFragment.newInstance();
-        winnerBracketFragment.setArguments(bundle);
-        final LoserBracketFragment loserBracketFragment = LoserBracketFragment.newInstance();
-        loserBracketFragment.setArguments(bundle);
-
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                if (position == 0) {
-                    return groupstageFragment;
-                }
-                if(position == 1){
-                    return winnerBracketFragment;
-                }
-                return loserBracketFragment;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                if (position == 0) {
-                    return GroupstageFragment.TAB_NAME;
-                }
-                if(position == 1){
-                    return WinnerBracketFragment.TAB_NAME;
-                }
-                return LoserBracketFragment.TAB_NAME;
-            }
-
-            @Override
-            public int getCount() {
-                return 3;
-            }
-        });
+    private void updateFragments() {
+        for(TournamentFragment fragment:fragments) {
+            fragment.retrieveResults(getCurrentTournamentId());
+        }
     }
 
     private void setCurrentTournamentId(int tournamentId){

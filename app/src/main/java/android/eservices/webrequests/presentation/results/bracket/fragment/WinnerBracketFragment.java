@@ -53,4 +53,9 @@ public class WinnerBracketFragment extends TournamentFragment {
         recyclerView.setAdapter(matchAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
+
+    @Override
+    public void retrieveResults(int tournamentId) {
+
+    }
 }

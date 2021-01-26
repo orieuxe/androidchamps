@@ -1,38 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <ScrollView
+    android:showDividers="middle"
+    android:divider="@drawable/divider8p">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/group_A"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/group_A"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"/>
+            android:layout_height="wrap_content"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/group_B"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/group_B"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/group_C"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/group_C"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/group_D"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp" />
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/group_D"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>
