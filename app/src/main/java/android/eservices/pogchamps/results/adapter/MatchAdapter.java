@@ -33,6 +33,7 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private TextView titleTextView;
         private TextView resultTextView;
         private TextView dateTextView;
+        private TextView contextTextView;
         private ImageView icon1ImageView;
         private ImageView icon2ImageView;
         private View v;
@@ -45,6 +46,7 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             titleTextView = v.findViewById(R.id.match_title);
             resultTextView = v.findViewById(R.id.match_result);
             dateTextView = v.findViewById(R.id.match_date);
+            contextTextView = v.findViewById(R.id.match_context);
             icon1ImageView = v.findViewById(R.id.player1_icon);
             icon2ImageView = v.findViewById(R.id.player2_icon);
         }
@@ -56,6 +58,11 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             titleTextView.setText(String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
             resultTextView.setText(match.getResult());
             dateTextView.setText((new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH)).format(match.getDate()));
+            if(match.getStage().equals("group")){
+                contextTextView.setText(("Round " + match.getRound()));
+            }else{
+                contextTextView.setText(String.format("%s %s", match.getRound(), match.getStage()));
+            }
             Glide.with(v)
                     .load(p1.getIconUrl())
                     .centerCrop()

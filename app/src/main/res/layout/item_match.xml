@@ -35,7 +35,6 @@
             app:layout_constraintStart_toEndOf="@+id/player1_icon"
             app:layout_constraintTop_toTopOf="parent"
             android:gravity="center"
-            app:layout_constraintVertical_chainStyle="packed"
             tools:text="My match title" />
 
         <TextView
@@ -47,7 +46,6 @@
             app:layout_constraintEnd_toStartOf="@+id/player2_icon"
             app:layout_constraintStart_toEndOf="@+id/player1_icon"
             app:layout_constraintTop_toBottomOf="@id/match_title"
-            app:layout_constraintVertical_chainStyle="packed"
             tools:text="My author 1, my author 2" />
 
         <TextView
@@ -60,8 +58,18 @@
             app:layout_constraintEnd_toStartOf="@+id/player2_icon"
             app:layout_constraintStart_toEndOf="@+id/player1_icon"
             app:layout_constraintTop_toBottomOf="@id/match_result"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:contentDescription="@string/player_image" />
+            tools:text="08 06 98" />
+
+        <TextView
+            android:id="@+id/match_context"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:gravity="center"
+            app:layout_constraintEnd_toStartOf="@+id/player2_icon"
+            app:layout_constraintStart_toEndOf="@+id/player1_icon"
+            app:layout_constraintTop_toBottomOf="@id/match_date"
+            tools:text="Round 2" />
 
         <ImageView
             android:id="@+id/player2_icon"
