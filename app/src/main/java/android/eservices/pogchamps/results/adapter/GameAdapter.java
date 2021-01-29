@@ -60,7 +60,7 @@ public class GameAdapter extends BaseAdapter<Game> {
             loader.start();
 
             Glide.with(v)
-                    .load(game.getImgUrl())
+                    .load("http://www.fen-to-image.com/image/"+game.getFen())
                     .placeholder(loader)
                     .into(boardImageView);
         }

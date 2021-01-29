@@ -16,6 +16,7 @@ public class Game implements Serializable {
     private String timecontrol;
     private String termination;
     private String moves;
+    private String fen;
 
     public int getId() {
         return id;
@@ -57,10 +58,11 @@ public class Game implements Serializable {
         return moves;
     }
 
-    public String getImgUrl() {
-        MoveList list = new MoveList();
-        list.loadFromSan(getMoves());
-        String fen = list.getFen().split(" ")[0];
-        return "http://www.fen-to-image.com/image/"+fen;
+    public String getFen() {
+        return fen;
+    }
+
+    public void setFen(String fen) {
+        this.fen = fen;
     }
 }
