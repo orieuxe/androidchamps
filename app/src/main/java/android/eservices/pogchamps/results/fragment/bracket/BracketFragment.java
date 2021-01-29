@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class BracketFragment extends TournamentFragment {
     protected static final String[] rounds = {"Quarterfinals", "Semifinals", "Final"};
@@ -48,7 +49,7 @@ public abstract class BracketFragment extends TournamentFragment {
     }
 
     private void setupRecyclerView(String round) {
-        int id = getResources().getIdentifier("round_"+round.toLowerCase(), "id", getContext().getPackageName());
+        int id = getResources().getIdentifier("round_"+round.toLowerCase(), "id", Objects.requireNonNull(getActivity()).getPackageName());
         RecyclerView recyclerView = rootView.findViewById(id);
         MatchAdapter adapter = new MatchAdapter();
         recyclerView.setAdapter(adapter);
@@ -63,21 +64,18 @@ public abstract class BracketFragment extends TournamentFragment {
     }
 
     protected void retrieveResults(int tournamentId, String round){
+        matchViewModel.getMatchsFrom(tournamentId, round).observe(getViewLifecycleOwner(), matches -> {
+            Objects.requireNonNull(adapters.get(rounds[0])).bindViewModels(matches, rounds[0]);
 
-
-
-        matchViewModel.getMatchsFrom(tournamentId, round).observe(getViewLifecycleOwner(), new Observer<List<Match>>() {
-            @Override
-            public void onChanged(final List<Match> matches) {
-                adapters.get(rounds[0]).bindViewModels(matches, rounds[0]);
-                if(matches.size() == 4){
-                    adapters.get(rounds[1]).bindViewModels(new ArrayList<>(Arrays.asList(matches.get(0).getNextMatch(), matches.get(2).getNextMatch())), rounds[1]);
-                    adapters.get(rounds[2]).bindViewModels(new ArrayList<Match>(){{add(matches.get(0).getNextMatch().getNextMatch());}}, rounds[2]);
-                }else{
-                    adapters.get(rounds[1]).clearViewModels();
-                    adapters.get(rounds[2]).clearViewModels();
-                }
+            List<Match> semiMatches = new ArrayList<>();
+            List<Match> finalMatch = new ArrayList<>();
+            if(matches.size() == 4){
+                semiMatches.add(matches.get(0).getNextMatch());
+                semiMatches.add(matches.get(2).getNextMatch());
+                finalMatch.add(matches.get(0).getNextMatch().getNextMatch());
             }
+            Objects.requireNonNull(adapters.get(rounds[1])).bindViewModels(semiMatches, rounds[1]);
+            Objects.requireNonNull(adapters.get(rounds[2])).bindViewModels(finalMatch, rounds[2]);
         });
     }
 }

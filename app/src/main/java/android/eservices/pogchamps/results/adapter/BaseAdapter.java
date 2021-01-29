@@ -31,7 +31,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<MyViewHolder> 
     }
 
     protected static final int TYPE_HEADER = 0;
-    protected static final int TYPE_MATCH = 1;
+    protected static final int TYPE_ITEM = 1;
     protected String header;
     protected List<T> list;
 
@@ -42,13 +42,12 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<MyViewHolder> 
     public void bindViewModels(List<T> list, String header) {
         Log.d(TAG, "bindViewModels: "+header);
         this.list.clear();
-        this.list.addAll(list);
+        if(list.isEmpty()){
+            header = "No data for ".concat(header);
+        }else{
+            this.list.addAll(list);
+        }
         this.header = header;
-        notifyDataSetChanged();
-    }
-
-    public void clearViewModels(){
-        this.list.clear();
         notifyDataSetChanged();
     }
 
@@ -57,7 +56,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<MyViewHolder> 
         if (position == 0)
             return TYPE_HEADER;
 
-        return TYPE_MATCH;
+        return TYPE_ITEM;
     }
 
     @NonNull
@@ -69,7 +68,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: "+holder);
         if(holder instanceof HeaderViewHolder){
             holder.bind(header);
         }else{

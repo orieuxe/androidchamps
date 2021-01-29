@@ -7,6 +7,7 @@ import android.eservices.pogchamps.results.fragment.TournamentFragment;
 import android.eservices.pogchamps.results.adapter.ParticipantAdapter;
 import android.eservices.pogchamps.results.viewmodel.ParticipantViewModel;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class GroupstageFragment extends TournamentFragment {
     }
 
     private void setupGroupRecyclerView(Character group) {
-        int id = getResources().getIdentifier("group_"+group.toString(), "id", getContext().getPackageName());
+        int id = getResources().getIdentifier("group_"+group.toString(), "id", Objects.requireNonNull(getActivity()).getPackageName());
         RecyclerView recyclerView = rootView.findViewById(id);
         ParticipantAdapter adapter = new ParticipantAdapter();
         recyclerView.setAdapter(adapter);
@@ -74,13 +75,15 @@ public class GroupstageFragment extends TournamentFragment {
 
     @Override
     public void retrieveResults(int tournamentId) {
-        for (Character g: groups){
-            Objects.requireNonNull(adapters.get(g)).clearViewModels();
-            participantViewModel.getParticipantsFrom(tournamentId, g).observe(getViewLifecycleOwner(), participants -> {
-                if (participants.isEmpty()) return;
-                Character group = participants.get(0).getGroupe();
-                Objects.requireNonNull(adapters.get(group)).bindViewModels(participants, "Group "+group);
-            });
-        }
+        getParticipantsFrom(tournamentId, groups[0]);
+    }
+
+    private void getParticipantsFrom(int tournamentId, Character group) {
+        participantViewModel.getParticipantsFrom(tournamentId, group).observe(getViewLifecycleOwner(), participants -> {
+            Objects.requireNonNull(adapters.get(group)).bindViewModels(participants, "Group "+group);
+            if(groups[groups.length - 1] != group){
+                getParticipantsFrom(tournamentId, (char) (group + 1));
+            }
+        });
     }
 }
