@@ -74,13 +74,10 @@ public class GroupstageFragment extends TournamentFragment {
     public void retrieveResults(int tournamentId) {
         for (Character g: groups){
             adapters.get(g).clearViewModels();
-            participantViewModel.getParticipantsFrom(tournamentId, g).observe(getViewLifecycleOwner(), new Observer<List<Participant>>() {
-                @Override
-                public void onChanged(List<Participant> participants) {
+            participantViewModel.getParticipantsFrom(tournamentId, g).observe(getViewLifecycleOwner(), participants -> {
                 if (participants.isEmpty()) return;
                 Character group = participants.get(0).getGroupe();
                 adapters.get(group).bindViewModels(participants, group);
-                }
             });
         }
     }
