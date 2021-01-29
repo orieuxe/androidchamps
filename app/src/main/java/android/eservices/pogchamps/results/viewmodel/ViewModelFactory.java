@@ -1,5 +1,6 @@
 package android.eservices.pogchamps.results.viewmodel;
 
+import android.eservices.pogchamps.data.api.model.Game;
 import android.eservices.pogchamps.data.repository.match.IMatchRepository;
 import android.eservices.pogchamps.data.repository.participant.IParticipantRepository;
 import android.eservices.pogchamps.data.repository.tournament.ITournamentRepository;
@@ -32,6 +33,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(MatchViewModel.class)) {
             return (T) new MatchViewModel(matchRepository);
+        }
+        if (modelClass.isAssignableFrom(GameViewModel.class)) {
+            return (T) new GameViewModel(matchRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

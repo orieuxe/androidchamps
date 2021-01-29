@@ -1,5 +1,7 @@
 package android.eservices.pogchamps.data.api.model;
 
+import com.github.bhlangonijr.chesslib.game.Game;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -8,13 +10,11 @@ public class Match implements Serializable {
     private int id;
     private Participant participant1;
     private Participant participant2;
-    private List<Game> games;
     private String result;
     private String round;
     private Date date;
     private String stage;
     private Match next_duel;
-    private Tournament tournament;
 
     public int getId() {
         return id;
@@ -42,14 +42,6 @@ public class Match implements Serializable {
 
     public String getStage() {
         return stage;
-    }
-
-    public Tournament getTournament() {
-        return tournament;
-    }
-
-    public List<Game> getGames() {
-        return games;
     }
 
     public Match getNextMatch(){

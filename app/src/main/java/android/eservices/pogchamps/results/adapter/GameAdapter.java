@@ -1,5 +1,6 @@
 package android.eservices.pogchamps.results.adapter;
 
+import android.content.Context;
 import android.eservices.pogchamps.R;
 import android.eservices.pogchamps.data.api.model.Game;
 import android.util.Log;
@@ -47,7 +48,6 @@ public class GameAdapter extends BaseAdapter<Game> {
         @Override
         protected void bind(Object obj) {
             Game game = (Game) obj;
-            Log.d(TAG, "final position: " + game.getImgUrl());
 
             whitePlayerTextView.setText(String.format("%s (%s)", game.getWhite(), game.getWhiteelo()));
             blackPlayerTextView.setText(String.format("%s (%s)", game.getBlack(), game.getBlackelo()));

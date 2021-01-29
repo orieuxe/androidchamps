@@ -1,5 +1,6 @@
 package android.eservices.pogchamps.data.api.service;
 
+import android.eservices.pogchamps.data.api.model.AdvancedMatch;
 import android.eservices.pogchamps.data.api.model.Match;
 
 import java.util.List;
@@ -12,6 +13,9 @@ public interface MatchService {
     @GET("duel/{tournamentId}/stage/{stage}")
     Single<List<Match>> getMatchsFromStage(@Path("tournamentId") int tournamentId, @Path("stage") String stage);
 
-    @GET("/duel/of/{participantId}")
+    @GET("duel/of/{participantId}")
     Single<List<Match>> getMatchsOf(@Path("participantId") int participantId);
+
+    @GET("duel/{duelId}")
+    Single<AdvancedMatch> getMatch(@Path("duelId") int duelId);
 }

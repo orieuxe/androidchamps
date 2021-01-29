@@ -1,5 +1,6 @@
 package android.eservices.pogchamps.data.repository.match;
 
+import android.eservices.pogchamps.data.api.model.AdvancedMatch;
 import android.eservices.pogchamps.data.api.model.Match;
 import android.eservices.pogchamps.data.api.service.MatchService;
 
@@ -23,5 +24,10 @@ public class MatchRepository implements IMatchRepository {
     @Override
     public Single<List<Match>> getMatchsOf(int participantId) {
         return matchService.getMatchsOf(participantId);
+    }
+
+    @Override
+    public Single<AdvancedMatch> getMatch(int matchId) {
+        return matchService.getMatch(matchId);
     }
 }
