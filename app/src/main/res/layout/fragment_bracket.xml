@@ -17,7 +17,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/round_semifinals"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_weight="1"
+            android:layout_height="0dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/round_final"
