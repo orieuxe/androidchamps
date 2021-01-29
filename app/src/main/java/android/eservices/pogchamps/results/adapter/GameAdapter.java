@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
@@ -47,8 +49,13 @@ public class GameAdapter extends BaseAdapter<Game> {
             dateTextView.setText((new SimpleDateFormat("dd MM yyyy hh:ss", Locale.ENGLISH)).format(game.getDate()));
             timecontrolTextView.setText(game.getTimecontrol());
             terminationTextView.setText(game.getTermination());
+
+            CircularProgressDrawable loader = new CircularProgressDrawable(v.getContext());
+            loader.start();
+
             Glide.with(v)
                     .load(game.getImgUrl())
+                    .placeholder(loader)
                     .into(boardImageView);
         }
     }
