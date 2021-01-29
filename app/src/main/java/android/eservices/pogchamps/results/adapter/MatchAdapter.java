@@ -1,8 +1,12 @@
 package android.eservices.pogchamps.results.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.eservices.pogchamps.R;
 import android.eservices.pogchamps.data.api.model.Match;
 import android.eservices.pogchamps.data.api.model.Player;
+import android.eservices.pogchamps.results.MatchActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,20 +26,22 @@ import java.util.Locale;
 import io.reactivex.annotations.NonNull;
 
 public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String PLAYER_ID = "playerId";
     private static final String TAG = "poggers";
 
-    public static class MatchViewHolder extends RecyclerView.ViewHolder{
+    public static class MatchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private static final String MATCH = "match";
         private TextView titleTextView;
         private TextView resultTextView;
         private TextView dateTextView;
         private ImageView icon1ImageView;
         private ImageView icon2ImageView;
         private View v;
+        private Match match;
 
         public MatchViewHolder(View v) {
             super(v);
             this.v = v;
+            v.setOnClickListener(this);
             titleTextView = v.findViewById(R.id.match_title);
             resultTextView = v.findViewById(R.id.match_result);
             dateTextView = v.findViewById(R.id.match_date);
@@ -44,6 +50,7 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         void bind(Match match) {
+            this.match = match;
             Player p1 = match.getParticipant1().getPlayer();
             Player p2 = match.getParticipant2().getPlayer();
             titleTextView.setText(String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
@@ -62,6 +69,15 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .circleCrop()
                     .into(icon2ImageView);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d(TAG, "onClick: "+match.getId());
+            Context context = view.getContext();
+            Intent intent = new Intent(context, MatchActivity.class);
+            intent.putExtra(MATCH, match);
+            context.startActivity(intent);
         }
     }
 

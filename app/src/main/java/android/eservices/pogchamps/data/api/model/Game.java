@@ -1,8 +1,9 @@
 package android.eservices.pogchamps.data.api.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Game {
+public class Game implements Serializable {
     private int id;
     private String site;
     private Date date;

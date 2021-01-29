@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".results.ParticipantActivity"
+    tools:context=".results.MatchActivity"
     android:orientation="vertical">
 
     <include
@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/participant_matchs"
+            android:id="@+id/match_games"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </ScrollView>

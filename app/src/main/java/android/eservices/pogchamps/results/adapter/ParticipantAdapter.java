@@ -23,7 +23,6 @@ import java.util.List;
 import io.reactivex.annotations.NonNull;
 
 public class ParticipantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String TAG = "poggers";
 
     public static class ParticipantViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener  {
         private static final String PARTICIPANT = "participant";

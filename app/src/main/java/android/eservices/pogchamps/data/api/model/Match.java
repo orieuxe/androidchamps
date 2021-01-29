@@ -1,9 +1,10 @@
 package android.eservices.pogchamps.data.api.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Match {
+public class Match implements Serializable {
     private int id;
     private Participant participant1;
     private Participant participant2;

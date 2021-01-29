@@ -27,30 +27,23 @@ import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private ViewPager viewPager;
     private TournamentSelectViewModel tournamentSelectViewModel;
     private List<TournamentFragment> fragments = new ArrayList<>();
-    private Toolbar toolbar;
-    private static final String TOURNAMENT_ID = "tournamentId";
-    private static final String TAG = "poggers";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         updateToolBar();
         setupViewPagerAndTabs();
         registerViewModels();
     }
 
     private void updateToolBar(){
-        int tournamentId = getCurrentTournamentId();
-        toolbar.setTitle(getString(R.string.app_name) + ' ' + tournamentId);
-        int colorId = getResources().getIdentifier(getString(R.string.app_name)+tournamentId, "color", getPackageName());
-        toolbar.setBackgroundColor(getResources().getColor(colorId));
+        super.updateToolBar(getCurrentTournamentId());
         setSupportActionBar(toolbar);
     }
 
@@ -135,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             if(fragment.getView() != null){
                 fragment.retrieveResults(getCurrentTournamentId());
             }else {
+                assert fragment.getArguments() != null;
                 fragment.getArguments().putInt(TOURNAMENT_ID, getCurrentTournamentId());
             }
         }
