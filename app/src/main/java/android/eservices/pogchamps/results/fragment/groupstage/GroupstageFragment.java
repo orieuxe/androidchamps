@@ -18,9 +18,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class GroupstageFragment extends TournamentFragment {
 
@@ -73,11 +75,11 @@ public class GroupstageFragment extends TournamentFragment {
     @Override
     public void retrieveResults(int tournamentId) {
         for (Character g: groups){
-            adapters.get(g).clearViewModels();
+            Objects.requireNonNull(adapters.get(g)).clearViewModels();
             participantViewModel.getParticipantsFrom(tournamentId, g).observe(getViewLifecycleOwner(), participants -> {
                 if (participants.isEmpty()) return;
                 Character group = participants.get(0).getGroupe();
-                adapters.get(group).bindViewModels(participants, group);
+                Objects.requireNonNull(adapters.get(group)).bindViewModels(participants, "Group "+group);
             });
         }
     }

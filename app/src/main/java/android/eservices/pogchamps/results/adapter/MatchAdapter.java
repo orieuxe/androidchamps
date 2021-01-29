@@ -19,16 +19,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.annotations.NonNull;
 
-public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MatchAdapter extends BaseAdapter<Match> {
     private static final String TAG = "poggers";
 
-    public static class MatchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MatchViewHolder extends MyViewHolder implements View.OnClickListener {
         private static final String MATCH = "match";
         private TextView titleTextView;
         private TextView resultTextView;
@@ -51,7 +49,9 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             icon2ImageView = v.findViewById(R.id.player2_icon);
         }
 
-        void bind(Match match) {
+        @Override
+        protected void bind(Object obj) {
+            Match match = (Match) obj;
             this.match = match;
             Player p1 = match.getParticipant1().getPlayer();
             Player p2 = match.getParticipant2().getPlayer();
@@ -88,69 +88,13 @@ public class MatchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    private static class RoundViewHolder extends RecyclerView.ViewHolder {
-        private TextView roundTextView;
-        public RoundViewHolder(View v) {
-            super(v);
-            this.roundTextView = v.findViewById(R.id.header_label);
-        }
-
-        void bind(String round) {
-            roundTextView.setText(round);
-        }
-    }
-
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_MATCH = 1;
-    private List<Match> matchList;
-    private String round; 
-    
-    public MatchAdapter() {
-        matchList = new ArrayList<>();
-        round = "";
-    }
-
-    public void bindViewModels(List<Match> matchList, String round) {
-        this.matchList.clear();
-        this.matchList.addAll(matchList);
-        this.round = round;
-        notifyDataSetChanged();
-    }
-
-    public void clearViewModels(){
-        this.matchList.clear();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0)
-            return TYPE_HEADER;
-
-        return TYPE_MATCH;
-    }
-
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == TYPE_HEADER){
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false);
-            return new RoundViewHolder(v);
-        }
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == TYPE_HEADER)
+            return super.onCreateViewHolder(parent, viewType);
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_match, parent, false);
         return new MatchViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof MatchViewHolder){
-            ((MatchViewHolder) holder).bind(matchList.get(position - 1));
-        }else if(holder instanceof RoundViewHolder){
-            ((RoundViewHolder) holder).bind(round);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return matchList.size() + 1;
     }
 }

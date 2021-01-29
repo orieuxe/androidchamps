@@ -63,6 +63,9 @@ public abstract class BracketFragment extends TournamentFragment {
     }
 
     protected void retrieveResults(int tournamentId, String round){
+
+
+
         matchViewModel.getMatchsFrom(tournamentId, round).observe(getViewLifecycleOwner(), new Observer<List<Match>>() {
             @Override
             public void onChanged(final List<Match> matches) {

@@ -9,26 +9,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.github.bhlangonijr.chesslib.Board;
-import com.github.bhlangonijr.chesslib.move.Move;
-import com.github.bhlangonijr.chesslib.move.MoveList;
-import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.annotations.NonNull;
 
-public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class GameAdapter extends BaseAdapter<Game> {
 
-    public static class GameViewHolder extends RecyclerView.ViewHolder {
-        private static final String GAME = "game";
+    private static class GameViewHolder extends MyViewHolder {
         private static final String TAG = "poggers";
         private ImageView boardImageView;
         private TextView titleTextView;
@@ -48,7 +38,9 @@ public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             terminationTextView = v.findViewById(R.id.termination);
         }
 
-        void bind(Game game){
+        @Override
+        protected void bind(Object obj) {
+            Game game = (Game) obj;
             Log.d(TAG, "final position: " + game.getImgUrl());
 
             titleTextView.setText(String.format("%s vs %s", game.getWhite(), game.getBlack()));
@@ -61,69 +53,13 @@ public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private static class TitleViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleTextView;
-        public TitleViewHolder(View v) {
-            super(v);
-            this.titleTextView = v.findViewById(R.id.header_label);
-        }
-
-        void bind(String title) {
-            titleTextView.setText(title);
-        }
-    }
-
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_GAME = 1;
-    private List<Game> gameList;
-    private String title; 
-    
-    public GameAdapter() {
-        gameList = new ArrayList<>();
-        title = "";
-    }
-
-    public void bindViewModels(List<Game> gameList, String title) {
-        this.gameList.clear();
-        this.gameList.addAll(gameList);
-        this.title = title;
-        notifyDataSetChanged();
-    }
-
-    public void clearViewModels(){
-        this.gameList.clear();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0)
-            return TYPE_HEADER;
-
-        return TYPE_GAME;
-    }
-
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == TYPE_HEADER){
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false);
-            return new TitleViewHolder(v);
-        }
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == TYPE_HEADER)
+           return super.onCreateViewHolder(parent, viewType);
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_game, parent, false);
         return new GameViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof GameViewHolder){
-            ((GameViewHolder) holder).bind(gameList.get(position - 1));
-        }else if(holder instanceof TitleViewHolder){
-            ((TitleViewHolder) holder).bind(title);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return gameList.size() + 1;
     }
 }
