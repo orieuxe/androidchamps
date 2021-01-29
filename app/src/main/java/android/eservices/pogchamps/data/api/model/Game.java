@@ -1,5 +1,8 @@
 package android.eservices.pogchamps.data.api.model;
 
+import com.github.bhlangonijr.chesslib.Board;
+import com.github.bhlangonijr.chesslib.move.MoveList;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -73,5 +76,12 @@ public class Game implements Serializable {
 
     public String getClocks() {
         return clocks;
+    }
+
+    public String getImgUrl() {
+        MoveList list = new MoveList();
+        list.loadFromSan(getMoves());
+        String fen = list.getFen().split(" ")[0];
+        return "http://www.fen-to-image.com/image/"+fen;
     }
 }
