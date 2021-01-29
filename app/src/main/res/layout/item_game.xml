@@ -26,16 +26,41 @@
             android:contentDescription="@string/small_chesss_board"/>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/white_player"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:textSize="15sp"
-            android:textStyle="bold"
+            android:textSize="12sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toRightOf="@id/board"
-            tools:text="Machin vs Chose"/>
+            tools:text="Machin (1585)"
+            app:drawableLeftCompat="@drawable/white_square"
+            android:drawablePadding="2dip" />
+
+        <TextView
+            android:id="@+id/black_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintLeft_toRightOf="@id/board"
+            app:layout_constraintTop_toBottomOf="@id/white_player"
+            tools:text="Chose (1589)"
+            app:drawableLeftCompat="@drawable/black_square"
+            android:drawablePadding="2dip" />
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintLeft_toRightOf="@id/board"
+            app:layout_constraintTop_toBottomOf="@id/black_player"
+            tools:text="1-0"/>
 
         <TextView
             android:id="@+id/date"
@@ -45,7 +70,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             app:layout_constraintLeft_toRightOf="@id/board"
-            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/result"
             tools:text="09 08 20"/>
 
         <TextView
@@ -66,6 +91,7 @@
             android:textSize="12sp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@id/board"
             app:layout_constraintTop_toBottomOf="@id/timecontrol"
             tools:text="Machin wins by resgination"/>

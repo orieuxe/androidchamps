@@ -57,7 +57,7 @@ public class MatchAdapter extends BaseAdapter<Match> {
             Player p2 = match.getParticipant2().getPlayer();
             titleTextView.setText(String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
             resultTextView.setText(match.getResult());
-            dateTextView.setText((new SimpleDateFormat("dd MM yyyy", Locale.ENGLISH)).format(match.getDate()));
+            dateTextView.setText((new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH)).format(match.getDate()));
             if(match.getStage().equals("group")){
                 contextTextView.setText(("Round " + match.getRound()));
             }else{

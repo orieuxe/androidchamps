@@ -48,6 +48,6 @@ public class MatchActivity extends BaseActivity {
 
         Player p1 = match.getParticipant1().getPlayer();
         Player p2 = match.getParticipant2().getPlayer();
-        adapter.bindViewModels(match.getGames(), String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
+        adapter.bindViewModels(match.getGames(), String.format("%s %s %s", p1.getTwitch(), match.getResult(), p2.getTwitch()));
     }
 }
