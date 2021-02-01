@@ -32,24 +32,26 @@ public class MainActivity extends BaseActivity {
     private ViewPager viewPager;
     private TournamentSelectViewModel tournamentSelectViewModel;
     private List<TournamentFragment> fragments = new ArrayList<>();
+    private int currentTournamentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        currentTournamentId = getCurrentTournamentId();
         updateToolBar();
         setupViewPagerAndTabs();
         registerViewModels();
     }
 
     private void updateToolBar(){
-        super.updateToolBar(getCurrentTournamentId());
+        super.updateToolBar(currentTournamentId);
         setSupportActionBar(toolbar);
     }
 
     private void setupViewPagerAndTabs() {
         Bundle bundle = new Bundle();
-        bundle.putInt(TOURNAMENT_ID, getCurrentTournamentId());
+        bundle.putInt(TOURNAMENT_ID, currentTournamentId);
 
         viewPager = findViewById(R.id.tab_viewpager);
 
@@ -112,7 +114,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() != getCurrentTournamentId())
+        if(item.getItemId() != currentTournamentId)
             onTournamentChange(item.getItemId());
         return super.onOptionsItemSelected(item);
     }
@@ -126,10 +128,10 @@ public class MainActivity extends BaseActivity {
     private void updateFragments() {
         for(TournamentFragment fragment:fragments) {
             if(fragment.getView() != null){
-                fragment.retrieveResults(getCurrentTournamentId());
+                fragment.retrieveResults(currentTournamentId);
             }else {
                 assert fragment.getArguments() != null;
-                fragment.getArguments().putInt(TOURNAMENT_ID, getCurrentTournamentId());
+                fragment.getArguments().putInt(TOURNAMENT_ID, currentTournamentId);
             }
         }
     }

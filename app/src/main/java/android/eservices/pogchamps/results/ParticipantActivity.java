@@ -1,7 +1,5 @@
 package android.eservices.pogchamps.results;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,9 +12,7 @@ import android.eservices.pogchamps.data.di.FakeDependencyInjection;
 import android.eservices.pogchamps.results.adapter.MatchAdapter;
 import android.eservices.pogchamps.results.viewmodel.MatchViewModel;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -33,7 +29,7 @@ public class ParticipantActivity extends BaseActivity {
         participant = (Participant) getIntent().getSerializableExtra(PARTICIPANT);
         updateToolBar();
         setupRecyclerView();
-        registerViewModels();
+        retrieveMatchs();
     }
 
     private void updateToolBar(){
@@ -57,7 +53,7 @@ public class ParticipantActivity extends BaseActivity {
         recyclerView.setNestedScrollingEnabled(false);
     }
 
-    private void registerViewModels() {
+    private void retrieveMatchs() {
         matchViewModel = new ViewModelProvider(this, FakeDependencyInjection.getViewModelFactory()).get(MatchViewModel.class);
         matchViewModel.getMatchsOf(participant.getId()).observe(this, new Observer<List<Match>>() {
             @Override

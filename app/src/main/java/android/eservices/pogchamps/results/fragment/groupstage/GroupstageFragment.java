@@ -1,27 +1,22 @@
 package android.eservices.pogchamps.results.fragment.groupstage;
 
 import android.eservices.pogchamps.R;
-import android.eservices.pogchamps.data.api.model.Participant;
 import android.eservices.pogchamps.data.di.FakeDependencyInjection;
 import android.eservices.pogchamps.results.fragment.TournamentFragment;
 import android.eservices.pogchamps.results.adapter.ParticipantAdapter;
 import android.eservices.pogchamps.results.viewmodel.ParticipantViewModel;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -53,12 +48,12 @@ public class GroupstageFragment extends TournamentFragment {
         super.onActivityCreated(savedInstanceState);
 
         for (Character group : groups) {
-            setupGroupRecyclerView(group);
+            setupRecyclerView(group);
         }
         registerViewModels();
     }
 
-    private void setupGroupRecyclerView(Character group) {
+    private void setupRecyclerView(Character group) {
         int id = getResources().getIdentifier("group_"+group.toString(), "id", Objects.requireNonNull(getActivity()).getPackageName());
         RecyclerView recyclerView = rootView.findViewById(id);
         ParticipantAdapter adapter = new ParticipantAdapter();

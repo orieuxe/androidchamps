@@ -58,7 +58,7 @@ public class MatchActivity extends BaseActivity {
 
             for (Game game:games) {
                 if(getGameFen(game) == null){
-                    setGameFen(game);
+                    saveGameFen(game);
                 }
                 game.setFen(getGameFen(game));
             }
@@ -68,7 +68,7 @@ public class MatchActivity extends BaseActivity {
 
     }
 
-    private void setGameFen(Game game){
+    private void saveGameFen(Game game){
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -81,7 +81,7 @@ public class MatchActivity extends BaseActivity {
 
     }
 
-    public String getGameFen(Game game){
+    private String getGameFen(Game game){
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         return sharedPref.getString(String.valueOf(game.getId()), null);
     }
