@@ -11,6 +11,7 @@ import android.eservices.pogchamps.results.fragment.groupstage.GroupstageFragmen
 import android.eservices.pogchamps.results.fragment.bracket.WinnerBracketFragment;
 import android.eservices.pogchamps.results.viewmodel.TournamentSelectViewModel;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -121,6 +122,7 @@ public class MainActivity extends BaseActivity {
 
     private void onTournamentChange(int tournamentId) {
         setCurrentTournamentId(tournamentId);
+        currentTournamentId = tournamentId;
         updateToolBar();
         updateFragments();
     }
