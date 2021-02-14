@@ -22,7 +22,6 @@ import io.reactivex.annotations.NonNull;
 public class GameAdapter extends BaseAdapter<Game> {
 
     private static class GameViewHolder extends MyViewHolder {
-        private static final String TAG = "poggers";
         private ImageView boardImageView;
         private TextView whitePlayerTextView;
         private TextView blackPlayerTextView;

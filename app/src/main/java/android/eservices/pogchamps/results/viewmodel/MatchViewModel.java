@@ -18,7 +18,6 @@ import io.reactivex.schedulers.Schedulers;
 public class MatchViewModel extends ViewModel {
     private final CompositeDisposable compositeDisposable;
     private IMatchRepository matchRepository;
-    private static final String TAG = "poggers";
 
     public MatchViewModel(IMatchRepository matchRepository) {
         this.matchRepository = matchRepository;
@@ -36,7 +35,6 @@ public class MatchViewModel extends ViewModel {
     public MutableLiveData<List<Match>> getMatchsFrom(int tournamentId, String stage) {
         isDataLoading.postValue(true);
         matchs = new MutableLiveData<>();
-        Log.d(TAG, "getMatchsFrom: "+tournamentId+' '+stage);
         compositeDisposable.add(matchRepository.getMatchsFromStage(tournamentId, stage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -59,7 +57,6 @@ public class MatchViewModel extends ViewModel {
     public MutableLiveData<List<Match>> getMatchsOf(int participantId) {
         isDataLoading.postValue(true);
         matchs = new MutableLiveData<>();
-        Log.d(TAG, "getMatchsOf: "+participantId);
         compositeDisposable.add(matchRepository.getMatchsOf(participantId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

@@ -15,7 +15,6 @@ import java.util.List;
 import io.reactivex.annotations.NonNull;
 
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<MyViewHolder> {
-    public static final String TAG = "poggers";
 
     protected static class HeaderViewHolder extends MyViewHolder {
         private TextView headerTextView;
@@ -40,7 +39,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<MyViewHolder> 
     }
 
     public void bindViewModels(List<T> list, String header) {
-        Log.d(TAG, "bindViewModels: "+header);
         this.list.clear();
         if(list.isEmpty()){
             header = "No data for ".concat(header);

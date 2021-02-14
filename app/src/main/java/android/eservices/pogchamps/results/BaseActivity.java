@@ -10,7 +10,6 @@ import android.os.Bundle;
 public class BaseActivity extends AppCompatActivity {
 
     public static final String TOURNAMENT_ID = "tournamentId";
-    public static final String TAG = "poggers";
     protected Toolbar toolbar;
 
     @Override

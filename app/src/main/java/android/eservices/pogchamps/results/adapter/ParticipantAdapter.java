@@ -28,7 +28,6 @@ public class ParticipantAdapter extends BaseAdapter<Participant> {
         private TextView playedTextView;
         private View v;
         private Participant participant;
-        private static final String TAG = "poggers";
 
         public ParticipantViewHolder(View v) {
             super(v);

@@ -20,7 +20,6 @@ import io.reactivex.schedulers.Schedulers;
 public class GameViewModel extends ViewModel {
     private final CompositeDisposable compositeDisposable;
     private IMatchRepository matchRepository;
-    private static final String TAG = "poggers";
 
     public GameViewModel(IMatchRepository matchRepository) {
         this.matchRepository = matchRepository;

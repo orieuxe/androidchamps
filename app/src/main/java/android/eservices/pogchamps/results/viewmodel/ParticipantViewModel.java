@@ -17,7 +17,6 @@ import io.reactivex.schedulers.Schedulers;
 public class ParticipantViewModel extends ViewModel {
     private final CompositeDisposable compositeDisposable;
     private IParticipantRepository participantRepository;
-    private static final String TAG = "poggers";
 
     public ParticipantViewModel(IParticipantRepository participantRepository) {
         this.participantRepository = participantRepository;

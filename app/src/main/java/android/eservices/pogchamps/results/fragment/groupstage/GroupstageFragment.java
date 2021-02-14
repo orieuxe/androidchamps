@@ -23,7 +23,6 @@ import java.util.Objects;
 public class GroupstageFragment extends TournamentFragment {
 
     public static final String TAB_NAME = "Groupstage";
-    public static final String TAG = "poggers";
     private static final char[] groups = "ABCD".toCharArray();
     private View rootView;
     private ParticipantViewModel participantViewModel;

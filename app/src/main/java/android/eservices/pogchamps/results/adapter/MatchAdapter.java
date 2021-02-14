@@ -23,7 +23,6 @@ import java.util.Locale;
 import io.reactivex.annotations.NonNull;
 
 public class MatchAdapter extends BaseAdapter<Match> {
-    private static final String TAG = "poggers";
 
     public static class MatchViewHolder extends MyViewHolder implements View.OnClickListener {
         private static final String MATCH = "match";
