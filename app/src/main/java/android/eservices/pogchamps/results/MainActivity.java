@@ -7,16 +7,13 @@ import android.eservices.pogchamps.data.api.model.Tournament;
 import android.eservices.pogchamps.data.di.FakeDependencyInjection;
 import android.eservices.pogchamps.results.fragment.TournamentFragment;
 import android.eservices.pogchamps.results.fragment.bracket.LoserBracketFragment;
-import android.eservices.pogchamps.results.fragment.groupstage.GroupstageFragment;
 import android.eservices.pogchamps.results.fragment.bracket.WinnerBracketFragment;
+import android.eservices.pogchamps.results.fragment.groupstage.GroupstageFragment;
 import android.eservices.pogchamps.results.viewmodel.TournamentSelectViewModel;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.Observer;

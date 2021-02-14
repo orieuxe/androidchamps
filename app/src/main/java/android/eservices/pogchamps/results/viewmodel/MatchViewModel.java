@@ -2,7 +2,6 @@ package android.eservices.pogchamps.results.viewmodel;
 
 import android.eservices.pogchamps.data.api.model.Match;
 import android.eservices.pogchamps.data.repository.match.IMatchRepository;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

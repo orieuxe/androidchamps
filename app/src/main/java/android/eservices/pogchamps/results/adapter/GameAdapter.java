@@ -1,9 +1,7 @@
 package android.eservices.pogchamps.results.adapter;
 
-import android.content.Context;
 import android.eservices.pogchamps.R;
 import android.eservices.pogchamps.data.api.model.Game;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
