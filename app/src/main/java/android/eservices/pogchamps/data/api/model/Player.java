@@ -19,7 +19,7 @@ public class Player implements Serializable {
         return username;
     }
 
-    public String getIconUrl(){
+    public Object getIcon(){
         return "https://pogchamps.chess.com/assets/player/"+this.twitch+".png";
     }
 }

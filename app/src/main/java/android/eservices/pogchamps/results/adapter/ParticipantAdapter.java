@@ -51,7 +51,7 @@ public class ParticipantAdapter extends BaseAdapter<Participant> {
             pointsTextView.setText(String.format("%s points", participant.getPoints()));
             playedTextView.setText(String.format("played %s", participant.getPlayed()));
             Glide.with(v)
-                    .load(p.getIconUrl())
+                    .load(p.getIcon())
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(iconImageView);

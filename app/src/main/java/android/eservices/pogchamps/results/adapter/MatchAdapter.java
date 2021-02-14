@@ -4,16 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.eservices.pogchamps.R;
 import android.eservices.pogchamps.data.api.model.Match;
+import android.eservices.pogchamps.data.api.model.DefaultPlayer;
+import android.eservices.pogchamps.data.api.model.Participant;
 import android.eservices.pogchamps.data.api.model.Player;
 import android.eservices.pogchamps.results.MatchActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -53,25 +52,27 @@ public class MatchAdapter extends BaseAdapter<Match> {
         protected void bind(Object obj) {
             Match match = (Match) obj;
             this.match = match;
-            Player p1 = match.getParticipant1().getPlayer();
-            Player p2 = match.getParticipant2().getPlayer();
-            titleTextView.setText(String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
-            resultTextView.setText(match.getResult());
             dateTextView.setText((new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH)).format(match.getDate()));
             if(match.getStage().equals("group")){
                 contextTextView.setText(("Round " + match.getRound()));
             }else{
                 contextTextView.setText(String.format("%s %s", match.getRound(), match.getStage()));
             }
+            resultTextView.setText(match.getResult());
+            Participant participant1 = match.getParticipant1();
+            Participant participant2 = match.getParticipant2();
+            Player p1 = participant1 == null ? new DefaultPlayer() : participant1.getPlayer();
+            Player p2 = participant2 == null ? new DefaultPlayer() : match.getParticipant2().getPlayer();
+            titleTextView.setText(String.format("%s vs %s", p1.getTwitch(), p2.getTwitch()));
             Glide.with(v)
-                    .load(p1.getIconUrl())
+                    .load(p1.getIcon())
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .circleCrop()
                     .into(icon1ImageView);
 
             Glide.with(v)
-                    .load(p2.getIconUrl())
+                    .load(p2.getIcon())
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .circleCrop()
@@ -80,7 +81,7 @@ public class MatchAdapter extends BaseAdapter<Match> {
 
         @Override
         public void onClick(View view) {
-            Log.d(TAG, "onClick: "+match.getId());
+            if(match.getParticipant1() == null || match.getParticipant2() == null) return;
             Context context = view.getContext();
             Intent intent = new Intent(context, MatchActivity.class);
             intent.putExtra(MATCH, match);
