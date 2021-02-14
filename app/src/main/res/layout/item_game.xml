@@ -22,7 +22,7 @@
             android:layout_height="100dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_book"
+            tools:src="@drawable/ic_chess"
             android:contentDescription="@string/small_chesss_board"/>
 
         <TextView
